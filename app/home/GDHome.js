@@ -26,6 +26,7 @@ import CommunalNavBar from '../main/GDCommunalNavBar';
 import CommunalHotCell from '../main/GDCommunalHotCell';
 import HalfHourHot from './GDHalfHourHot';
 import Search from './GDSearch';
+import NoDataView from '../main/GDNoDataView';
 
 import HTTPBase from '../http/HTTPBase';
 
@@ -37,15 +38,17 @@ export default class GDHome extends Component {
         // 初始状态
         this.state = {
             dataSource: new ListView.DataSource({rowHasChanged:(r1, r2) => r1 !== r2}),
-            loaded:true,
+            loaded:false,
             isModal:false
         };
-        this.fetchData = this.fetchData.bind(this);
+        this.loadData = this.loadData.bind(this);
         this.loadMore = this.loadMore.bind(this);
+        this.loadMoreData = this.loadMoreData.bind(this);
+
     }
 
-    // 网络请求
-    fetchData(resolve) {
+    // 加载最新数据网络请求
+    loadData(resolve) {
 
         let params = {"count" : 5 };
 
@@ -66,6 +69,17 @@ export default class GDHome extends Component {
             })
     }
 
+    // 加载更多数据的网络请求
+    loadMoreData() {
+
+    }
+
+    // 加载更多数据操作
+    loadMore() {
+        // 数据加载操作
+        this.loadMoreData();
+    }
+
     // 模态到近半小时热门
     pushToHalfHourHot() {
         this.setState({
@@ -77,6 +91,20 @@ export default class GDHome extends Component {
     pushToSearch() {
         this.props.navigator.push({
             component:Search,
+        })
+    }
+
+    // 安卓模态销毁处理
+    onRequestClose() {
+        this.setState({
+            isModal:false
+        })
+    }
+
+    // 关闭模态
+    closeModal(data) {
+        this.setState({
+            isModal:data
         })
     }
 
@@ -111,10 +139,7 @@ export default class GDHome extends Component {
         );
     }
 
-    loadMore() {
-        // 数据加载操作
-    }
-
+    // ListView尾部
     renderFooter() {
         return (
             <View style={{height: 100}}>
@@ -132,7 +157,7 @@ export default class GDHome extends Component {
         }else {
             return(
                 <PullList
-                    onPullRelease={(resolve) => this.fetchData(resolve)}
+                    onPullRelease={(resolve) => this.loadData(resolve)}
                     dataSource={this.state.dataSource}
                     renderRow={this.renderRow}
                     showsHorizontalScrollIndicator={false}
@@ -158,19 +183,7 @@ export default class GDHome extends Component {
     }
 
     componentDidMount() {
-        this.fetchData();
-    }
-
-    onRequestClose() {
-        this.setState({
-            isModal:false
-        })
-    }
-
-    closeModal(data) {
-        this.setState({
-            isModal:data
-        })
+        this.loadData();
     }
 
     render() {
