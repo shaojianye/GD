@@ -1,4 +1,7 @@
 /**
+ * Created by yeshaojian on 2017/3/30.
+ */
+/**
  * Created by yeshaojian on 17/3/14.
  */
 
@@ -27,10 +30,10 @@ import NoDataView from '../main/GDNoDataView';
 
 import HTTPBase from '../http/HTTPBase';
 
-export default class GDHalfHourHot extends Component {
+export default class GDUSHalfHourHot extends Component {
 
     // 构造
-      constructor(props) {
+    constructor(props) {
         super(props);
         // 初始状态
         this.state = {
@@ -38,15 +41,19 @@ export default class GDHalfHourHot extends Component {
             loaded:true,
         };
         this.fetchData = this.fetchData.bind(this);
-      }
+    }
 
-      static defaultProps = {
-          removeModal:{}
-      }
+    static defaultProps = {
+        removeModal:{}
+    }
 
     // 网络请求
     fetchData(resolve) {
-        HTTPBase.get('http://guangdiu.com/api/gethots.php')
+        let params = {
+            "c" : "us"
+        };
+
+        HTTPBase.get('http://guangdiu.com/api/gethots.php', params)
             .then((responseData) => {
                 this.setState({
                     dataSource: this.state.dataSource.cloneWithRows(responseData.data),
@@ -77,11 +84,11 @@ export default class GDHalfHourHot extends Component {
     // 返回右边按钮
     renderRightItem() {
         return(
-        <TouchableOpacity
-            onPress={()=>{this.popToHome(false)}}
-        >
-            <Text style={styles.navbarRightItemStyle}>关闭</Text>
-        </TouchableOpacity>
+            <TouchableOpacity
+                onPress={()=>{this.popToHome(false)}}
+            >
+                <Text style={styles.navbarRightItemStyle}>关闭</Text>
+            </TouchableOpacity>
         );
     }
 

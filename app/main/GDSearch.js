@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 
 // 引用外部文件
-import CommunalNavBar from '../main/GDCommunalNavBar';
+import CommunalNavBar from './GDCommunalNavBar';
 
 export default class GDSearch extends Component {
 

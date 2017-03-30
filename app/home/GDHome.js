@@ -27,7 +27,7 @@ import CommunalNavBar from '../main/GDCommunalNavBar';
 import CommunalHotCell from '../main/GDCommunalHotCell';
 import CommunalDetail from '../main/GDCommunalDetail';
 import HalfHourHot from './GDHalfHourHot';
-import Search from './GDSearch';
+import Search from '../main/GDSearch';
 import NoDataView from '../main/GDNoDataView';
 
 import HTTPBase from '../http/HTTPBase';
@@ -224,6 +224,7 @@ export default class GDHome extends Component {
         }
     }
 
+    // 跳转到详情页
     pushToDetail(value) {
         this.props.navigator.push({
             component:CommunalDetail,
@@ -261,7 +262,19 @@ export default class GDHome extends Component {
                     visible={this.state.isModal}
                     onRequestClose={() => this.onRequestClose()}
                 >
-                    <HalfHourHot removeModal={(data) => this.closeModal(data)}/>
+                    <Navigator
+                        initialRoute={{
+                            name:'halfHourHot',
+                            component:HalfHourHot
+                        }}
+
+                        renderScene={(route, navigator) => {
+                            let Component = route.component;
+                            return <Component
+                                removeModal={(data) => this.closeModal(data)}
+                                {...route.params}
+                                navigator={navigator} />
+                        }} />
                 </Modal>
 
                 {/* 导航栏样式 */}
