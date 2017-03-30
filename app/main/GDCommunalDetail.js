@@ -8,6 +8,7 @@ import {
     View,
     Text,
     TouchableOpacity,
+    DeviceEventEmitter,
 } from 'react-native';
 
 // 引入外部文件
@@ -33,6 +34,16 @@ export default class GDCommunalDetail extends Component {
                 <Text>返回</Text>
             </TouchableOpacity>
         );
+    }
+
+    componentWillMount() {
+        // 发送通知
+        DeviceEventEmitter.emit('isHiddenTabBar', true);
+    }
+
+    componentWillUnmount() {
+        // 发送通知
+        DeviceEventEmitter.emit('isHiddenTabBar', false);
     }
 
     render() {
