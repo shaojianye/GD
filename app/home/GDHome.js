@@ -25,6 +25,7 @@ const {width, height} = Dimensions.get('window');
 // 引用外部文件
 import CommunalNavBar from '../main/GDCommunalNavBar';
 import CommunalHotCell from '../main/GDCommunalHotCell';
+import CommunalDetail from '../main/GDCommunalDetail';
 import HalfHourHot from './GDHalfHourHot';
 import Search from './GDSearch';
 import NoDataView from '../main/GDNoDataView';
@@ -210,7 +211,7 @@ export default class GDHome extends Component {
                 <PullList
                     onPullRelease={(resolve) => this.loadData(resolve)}
                     dataSource={this.state.dataSource}
-                    renderRow={this.renderRow}
+                    renderRow={this.renderRow.bind(this)}
                     showsHorizontalScrollIndicator={false}
                     style={styles.listViewStyle}
                     initialListSize={5}
@@ -223,13 +224,26 @@ export default class GDHome extends Component {
         }
     }
 
+    pushToDetail(value) {
+        this.props.navigator.push({
+            component:CommunalDetail,
+            params: {
+                url: 'https://guangdiu.com/api/showdetail.php' + '?' + 'id=' + value
+            }
+        })
+    }
+
     // 返回每一行cell的样式
     renderRow(rowData) {
         return(
-            <CommunalHotCell
-                image={rowData.image}
-                title={rowData.title}
-            />
+            <TouchableOpacity
+                onPress={() => this.pushToDetail(rowData.id)}
+            >
+                <CommunalHotCell
+                    image={rowData.image}
+                    title={rowData.title}
+                />
+            </TouchableOpacity>
         );
     }
 
