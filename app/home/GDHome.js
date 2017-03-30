@@ -14,6 +14,7 @@ import {
     Navigator,
     ActivityIndicator,
     Modal,
+    AsyncStorage,
 } from 'react-native';
 
 // 第三方
@@ -41,28 +42,40 @@ export default class GDHome extends Component {
             loaded:false,
             isModal:false
         };
+
+        this.data = [];
         this.loadData = this.loadData.bind(this);
         this.loadMore = this.loadMore.bind(this);
-        this.loadMoreData = this.loadMoreData.bind(this);
-
     }
 
     // 加载最新数据网络请求
     loadData(resolve) {
 
-        let params = {"count" : 5 };
+        let params = {"count" : 10 };
 
-        HTTPBase.post('http://guangdiu.com/api/getlist.php', params)
+        HTTPBase.get('https://guangdiu.com/api/getlist.php', params)
             .then((responseData) => {
+
+                // 拼接数据
+                this.data = this.data.concat(responseData.data);
+
+                // 重新渲染
                 this.setState({
-                    dataSource: this.state.dataSource.cloneWithRows(responseData.data),
+                    dataSource: this.state.dataSource.cloneWithRows(this.data),
                     loaded:true,
                 });
+
+                // 关闭刷新动画
                 if (resolve !== undefined){
                     setTimeout(() => {
                         resolve();
                     }, 1000);
                 }
+
+                // 存储数组中最后一个元素的id
+                let lastID = responseData.data[responseData.data.length - 1].id;
+                console.log(responseData.data);
+                AsyncStorage.setItem('lastID', lastID.toString());
             })
             .catch((error) => {
 
@@ -70,14 +83,42 @@ export default class GDHome extends Component {
     }
 
     // 加载更多数据的网络请求
-    loadMoreData() {
+    loadMoreData(value) {
 
+        let params = {
+            "count" : 10,
+            "sinceid" : value
+        };
+
+        HTTPBase.get('https://guangdiu.com/api/getlist.php', params)
+            .then((responseData) => {
+
+                // 拼接数据
+                this.data = this.data.concat(responseData.data);
+
+                this.setState({
+                    dataSource: this.state.dataSource.cloneWithRows(this.data),
+                    loaded:true,
+                });
+
+                // 存储数组中最后一个元素的id
+                let lastID = responseData.data[responseData.data.length - 1].id;
+                AsyncStorage.setItem('lastID', lastID.toString());
+            })
+            .catch((error) => {
+
+            })
     }
 
     // 加载更多数据操作
     loadMore() {
-        // 数据加载操作
-        this.loadMoreData();
+        // 读取id
+        AsyncStorage.getItem('lastID')
+            .then((value) => {
+                // 数据加载操作
+                this.loadMoreData(value);
+            })
+
     }
 
     // 模态到近半小时热门
@@ -119,10 +160,20 @@ export default class GDHome extends Component {
         );
     }
 
+    showID() {
+        //读取存储的id
+        AsyncStorage.getItem('lastID')
+            .then((value) => {
+                alert(value);
+            })
+    }
+
     // 返回中间按钮
     renderTitleItem() {
         return(
-            <TouchableOpacity>
+            <TouchableOpacity
+                onPress={() => {this.showID()}}
+            >
                 <Image source={{uri:'navtitle_home_down_66x20'}} style={styles.navbarTitleItemStyle} />
             </TouchableOpacity>
         );
