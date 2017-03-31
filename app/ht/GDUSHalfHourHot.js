@@ -28,7 +28,6 @@ import CommunalHotCell from '../main/GDCommunalHotCell';
 import CommunalDetail from '../main/GDCommunalDetail';
 import NoDataView from '../main/GDNoDataView';
 
-import HTTPBase from '../http/HTTPBase';
 
 export default class GDUSHalfHourHot extends Component {
 

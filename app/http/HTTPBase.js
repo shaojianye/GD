@@ -90,4 +90,4 @@ HTTPBase.post = function (url, params, headers) {
 }
 
 
-export default HTTPBase;
+global.HTTPBase = HTTPBase;

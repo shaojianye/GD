@@ -30,8 +30,6 @@ import HalfHourHot from './GDHalfHourHot';
 import Search from '../main/GDSearch';
 import NoDataView from '../main/GDNoDataView';
 
-import HTTPBase from '../http/HTTPBase';
-
 export default class GDHome extends Component {
 
     // 构造
@@ -82,9 +80,12 @@ export default class GDHome extends Component {
                 // 存储数组中第一个元素的id
                 let cnfirstID = responseData.data[0].id;
                 AsyncStorage.setItem('cnfirstID', cnfirstID.toString());
+
+                // 存储数据到本地
+
             })
             .catch((error) => {
-
+                // 拿到本地存储的数据,展示出来,如果没有存储,那就显示无数据页面
             })
     }
 

@@ -30,8 +30,6 @@ import USHalfHourHot from './GDUSHalfHourHot';
 import Search from '../main/GDSearch';
 import NoDataView from '../main/GDNoDataView';
 
-import HTTPBase from '../http/HTTPBase';
-
 export default class GDHome extends Component {
 
     // 构造
