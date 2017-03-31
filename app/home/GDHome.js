@@ -57,6 +57,9 @@ export default class GDHome extends Component {
         HTTPBase.get('https://guangdiu.com/api/getlist.php', params)
             .then((responseData) => {
 
+                // 清空数组
+                this.data = [];
+
                 // 拼接数据
                 this.data = this.data.concat(responseData.data);
 
@@ -74,9 +77,11 @@ export default class GDHome extends Component {
                 }
 
                 // 存储数组中最后一个元素的id
-                let lastID = responseData.data[responseData.data.length - 1].id;
-                console.log(responseData.data);
-                AsyncStorage.setItem('lastID', lastID.toString());
+                let cnlastID = responseData.data[responseData.data.length - 1].id;
+                AsyncStorage.setItem('cnlastID', cnlastID.toString());
+                // 存储数组中第一个元素的id
+                let cnfirstID = responseData.data[0].id;
+                AsyncStorage.setItem('cnfirstID', cnfirstID.toString());
             })
             .catch((error) => {
 
@@ -103,8 +108,8 @@ export default class GDHome extends Component {
                 });
 
                 // 存储数组中最后一个元素的id
-                let lastID = responseData.data[responseData.data.length - 1].id;
-                AsyncStorage.setItem('lastID', lastID.toString());
+                let cnlastID = responseData.data[responseData.data.length - 1].id;
+                AsyncStorage.setItem('cnlastID', cnlastID.toString());
             })
             .catch((error) => {
 
@@ -114,7 +119,7 @@ export default class GDHome extends Component {
     // 加载更多数据操作
     loadMore() {
         // 读取id
-        AsyncStorage.getItem('lastID')
+        AsyncStorage.getItem('cnlastID')
             .then((value) => {
                 // 数据加载操作
                 this.loadMoreData(value);
@@ -163,7 +168,7 @@ export default class GDHome extends Component {
 
     showID() {
         //读取存储的id
-        AsyncStorage.getItem('lastID')
+        AsyncStorage.getItem('cnlastID')
             .then((value) => {
                 alert(value);
             })
