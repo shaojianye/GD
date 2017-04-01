@@ -77,6 +77,9 @@ export default class GDHome extends Component {
                 // 存储数组中最后一个元素的id
                 let uslastID = responseData.data[responseData.data.length - 1].id;
                 AsyncStorage.setItem('uslastID', uslastID.toString());
+                // 存储数组中第一个元素的id
+                let usfirstID = responseData.data[0].id;
+                AsyncStorage.setItem('usfirstID', usfirstID.toString());
             })
             .catch((error) => {
 
@@ -106,9 +109,6 @@ export default class GDHome extends Component {
                 // 存储数组中最后一个元素的id
                 let uslastID = responseData.data[responseData.data.length - 1].id;
                 AsyncStorage.setItem('uslastID', uslastID.toString());
-                // 存储数组中第一个元素的id
-                let usfirstID = responseData.data[0].id;
-                AsyncStorage.setItem('usfirstID', usfirstID.toString());
             })
             .catch((error) => {
 

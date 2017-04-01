@@ -21,7 +21,7 @@ import TabNavigator from 'react-native-tab-navigator';
 import Home from '../home/GDHome';
 import HT from '../ht/GDHt';
 import HourList from '../hourList/GDHourList';
-import HTTPBase from '../http/HTTPBase';
+import HTTP from '../http/HTTPBase';
 import RealmStorage from '../storage/realmStorage';
 
 export default class GD extends Component {
