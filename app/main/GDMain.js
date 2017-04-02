@@ -121,6 +121,9 @@ export default class GD extends Component {
                             usbadgeText:responseData.us
                         })
                     })
+                    .catch((error) => {
+
+                    })
             }
         }, 30000);
     }

@@ -29,7 +29,7 @@ const HTSchame = {
 let realm = new Realm({schema:[HomeSchame, HTSchame]});
 
 // 增加
-RealmBase.write = function (schame, data) {
+RealmBase.create = function (schame, data) {
     realm.write(() => {
         for (let i = 0; i<data.length; i++) {
             let temp = data[i];
