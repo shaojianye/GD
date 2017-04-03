@@ -24,7 +24,7 @@ const {width, height} = Dimensions.get('window');
 
 // 引用外部文件
 import CommunalNavBar from '../main/GDCommunalNavBar';
-import CommunalHotCell from '../main/GDCommunalHotCell';
+import CommunalCell from '../main/GDCommunalCell';
 import CommunalDetail from '../main/GDCommunalDetail';
 import HalfHourHot from './GDHalfHourHot';
 import Search from '../main/GDSearch';
@@ -77,6 +77,7 @@ export default class GDHome extends Component {
                 // 存储数组中最后一个元素的id
                 let cnlastID = responseData.data[responseData.data.length - 1].id;
                 AsyncStorage.setItem('cnlastID', cnlastID.toString());
+
                 // 存储数组中第一个元素的id
                 let cnfirstID = responseData.data[0].id;
                 AsyncStorage.setItem('cnfirstID', cnfirstID.toString());
@@ -256,9 +257,12 @@ export default class GDHome extends Component {
             <TouchableOpacity
                 onPress={() => this.pushToDetail(rowData.id)}
             >
-                <CommunalHotCell
+                <CommunalCell
                     image={rowData.image}
                     title={rowData.title}
+                    mall={rowData.mall}
+                    pubTime={rowData.pubtime}
+                    fromSite={rowData.fromsite}
                 />
             </TouchableOpacity>
         );
