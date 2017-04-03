@@ -70,30 +70,9 @@ export default class GDHourList extends Component {
                         resolve();
                     }, 1000);
                 }
-
-                // 存储数组中最后一个元素的id
-                let cnlastID = responseData.data[responseData.data.length - 1].id;
-                AsyncStorage.setItem('cnlastID', cnlastID.toString());
-
-                // 存储数组中第一个元素的id
-                let cnfirstID = responseData.data[0].id;
-                AsyncStorage.setItem('cnfirstID', cnfirstID.toString());
-
-                // 清楚本地存储的数据
-                RealmBase.removeAllData('HomeData');
-
-                // 存储数据到本地
-                RealmBase.create('HomeData', responseData.data);
             })
             .catch((error) => {
-                // 拿到本地存储的数据,展示出来,如果没有存储,那就显示无数据页面
-                this.data = RealmBase.loadAll('HomeData');
 
-                // 重新渲染
-                this.setState({
-                    dataSource: this.state.dataSource.cloneWithRows(this.data),
-                    loaded:true,
-                });
             })
     }
 
