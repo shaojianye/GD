@@ -78,7 +78,23 @@ export default class GDHourList extends Component {
 
     // 跳转到设置
     pushToSettings() {
+        let date = new Date();      // 获取当前时间
 
+        let year = date.getFullYear();      // 年
+        let month = date.getMonth();        // 月
+        let day = date.getDate();           // 日
+
+        if (month >= 1 && month <=9) {  // 在 10 以内,我们手动添加 0
+            month = "0" + (month + 1);      // 注意,js 中月份是以 0 开始的
+        }
+
+        if (day >= 1 && day <=9) {      // 在 10 以内,我们手动添加 0
+            day = "0" + day;
+        }
+
+        let currentDate = year + month + day;
+
+        alert(currentDate);
     }
 
     // 返回中间标题
