@@ -22,6 +22,7 @@ import {
 import {PullList} from 'react-native-pull';
 
 const {width, height} = Dimensions.get('window');
+const dismissKeyboard = require('dismissKeyboard');
 
 // 引用外部文件
 import CommunalNavBar from '../main/GDCommunalNavBar';
@@ -127,7 +128,11 @@ export default class GDHome extends Component {
 
     }
 
+    // 返回
     pop() {
+        // 回收键盘
+        dismissKeyboard();
+
         this.props.navigator.pop();
     }
 
@@ -241,7 +246,9 @@ export default class GDHome extends Component {
 
                     {/* 右边 */}
                     <View style={{marginRight:10}}>
-                        <TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={() => dismissKeyboard()}
+                        >
                             <Text style={{color:'green'}}>取消</Text>
                         </TouchableOpacity>
                     </View>
