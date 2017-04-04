@@ -178,20 +178,10 @@ export default class GDHome extends Component {
         );
     }
 
-    showID() {
-        //读取存储的id
-        AsyncStorage.getItem('cnlastID')
-            .then((value) => {
-                alert(value);
-            })
-    }
-
     // 返回中间按钮
     renderTitleItem() {
         return(
-            <TouchableOpacity
-                onPress={() => {this.showID()}}
-            >
+            <TouchableOpacity>
                 <Image source={{uri:'navtitle_home_down_66x20'}} style={styles.navbarTitleItemStyle} />
             </TouchableOpacity>
         );

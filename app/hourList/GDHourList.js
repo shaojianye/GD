@@ -27,6 +27,7 @@ import CommunalNavBar from '../main/GDCommunalNavBar';
 import CommunalCell from '../main/GDCommunalCell';
 import CommunalDetail from '../main/GDCommunalDetail';
 import NoDataView from '../main/GDNoDataView';
+import Settings from './GDSettings';
 
 export default class GDHourList extends Component {
 
@@ -88,7 +89,9 @@ export default class GDHourList extends Component {
 
     // 跳转到设置
     pushToSettings() {
-
+        this.props.navigator.push({
+            component:Settings,
+        })
     }
 
     // 返回中间标题

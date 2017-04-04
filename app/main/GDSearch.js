@@ -154,7 +154,7 @@ export default class GDHome extends Component {
     // 返回中间按钮
     renderTitleItem() {
         return(
-            <Text>搜索全网折扣</Text>
+            <Text style={styles.navbarTitleItemStyle}>搜索全网折扣</Text>
         );
     }
 
@@ -274,8 +274,9 @@ const styles = StyleSheet.create({
         marginLeft:15,
     },
     navbarTitleItemStyle: {
-        width:66,
-        height:20,
+        fontSize:17,
+        color:'black',
+        marginRight:50
     },
     navbarRightItemStyle: {
         width:20,
