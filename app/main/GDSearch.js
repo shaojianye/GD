@@ -247,7 +247,7 @@ export default class GDHome extends Component {
                     {/* 右边 */}
                     <View style={{marginRight:10}}>
                         <TouchableOpacity
-                            onPress={() => dismissKeyboard()}
+                            onPress={() => this.pop()}
                         >
                             <Text style={{color:'green'}}>取消</Text>
                         </TouchableOpacity>
