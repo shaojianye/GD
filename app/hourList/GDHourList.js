@@ -37,31 +37,35 @@ export default class GDHourList extends Component {
         this.state = {
             dataSource: new ListView.DataSource({rowHasChanged:(r1, r2) => r1 !== r2}),
             loaded:false,
-            isModal:false
+            prompt:'',
         };
 
-        this.data = [];
+        this.nexthourhour = '';
+        this.nexthourdate = '';
+        this.lasthourhour = '';
+        this.lasthourdate = '';
         this.loadData = this.loadData.bind(this);
     }
 
     // 加载最新数据网络请求
-    loadData(resolve) {
-
+    loadData(resolve, date, hour) {
         let params = {};
+
+        if (date) {
+            params = {
+                "date" : date,
+                "hour" : hour
+            }
+        }
 
         HTTPBase.get('http://guangdiu.com/api/getranklist.php', params)
             .then((responseData) => {
 
-                // 清空数组
-                this.data = [];
-
-                // 拼接数据
-                this.data = this.data.concat(responseData.data);
-
                 // 重新渲染
                 this.setState({
-                    dataSource: this.state.dataSource.cloneWithRows(this.data),
+                    dataSource: this.state.dataSource.cloneWithRows(responseData.data),
                     loaded:true,
+                    prompt:responseData.displaydate + responseData.rankhour + '点档' + '(' + responseData.rankduring + ')'
                 });
 
                 // 关闭刷新动画
@@ -70,6 +74,12 @@ export default class GDHourList extends Component {
                         resolve();
                     }, 1000);
                 }
+
+                // 暂时保留一些数据
+                this.nexthourhour = responseData.nexthourhour;
+                this.nexthourdate = responseData.nexthourdate;
+                this.lasthourhour = responseData.lasthourhour;
+                this.lasthourdate = responseData.lasthourdate;
             })
             .catch((error) => {
 
@@ -78,23 +88,7 @@ export default class GDHourList extends Component {
 
     // 跳转到设置
     pushToSettings() {
-        let date = new Date();      // 获取当前时间
 
-        let year = date.getFullYear();      // 年
-        let month = date.getMonth();        // 月
-        let day = date.getDate();           // 日
-
-        if (month >= 1 && month <=9) {  // 在 10 以内,我们手动添加 0
-            month = "0" + (month + 1);      // 注意,js 中月份是以 0 开始的
-        }
-
-        if (day >= 1 && day <=9) {      // 在 10 以内,我们手动添加 0
-            day = "0" + day;
-        }
-
-        let currentDate = year + month + day;
-
-        alert(currentDate);
     }
 
     // 返回中间标题
@@ -166,6 +160,14 @@ export default class GDHourList extends Component {
         this.loadData();
     }
 
+    lastHour() {
+        this.loadData(undefined, this.lasthourdate, this.lasthourhour);
+    }
+
+    nextHour() {
+        this.loadData(undefined, this.nexthourdate, this.nexthourhour);
+    }
+
     render() {
         return (
             <View style={styles.container}>
@@ -177,7 +179,7 @@ export default class GDHourList extends Component {
 
                 {/* 提醒栏 */}
                 <View style={styles.promptViewStyle}>
-                    <Text>提示栏提示栏提示栏</Text>
+                    <Text>{this.state.prompt}</Text>
                 </View>
 
                 {/* 根据网络状态决定是否渲染 listview */}
@@ -185,11 +187,15 @@ export default class GDHourList extends Component {
 
                 {/* 操作栏 */}
                 <View style={styles.operationViewStyle}>
-                    <TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => this.lastHour()}
+                    >
                         <Text style={{marginRight:10, fontSize:17, color:'green'}}>{"< " + "上1小时"}</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => this.nextHour()}
+                    >
                         <Text style={{marginLeft:10, fontSize:17, color:'green'}}>{"下1小时" + " >"}</Text>
                     </TouchableOpacity>
                 </View>
