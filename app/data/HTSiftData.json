@@ -1,0 +1,73 @@
+[
+  {
+    "title" : "全部",
+    "image" : "iconall_40x40",
+    "mall" : ""
+  },
+
+  {
+    "title" : "Amazon",
+    "image" : "iconamazon_40x40",
+    "mall" : "Amazon"
+  },
+
+  {
+    "title" : "6pm",
+    "image" : "icon6pm_40x40",
+    "mall" : "6pm"
+  },
+
+  {
+    "title" : "日本亚马逊",
+    "image" : "iconamazon_40x40",
+    "mall" : "日本亚马逊"
+  },
+
+  {
+    "title" : "直邮中国",
+    "image" : "iconzdirect_40x40",
+    "mall" : "zdirect"
+  },
+
+  {
+    "title" : "数码",
+    "image" : "icondigital_40x40",
+    "mall" : "digital"
+  },
+
+  {
+    "title" : "母婴",
+    "image" : "iconbaby_40x40",
+    "mall" : "baby"
+  },
+
+  {
+    "title" : "服装",
+    "image" : "iconclothes_40x40",
+    "mall" : "clothes"
+  },
+
+  {
+    "title" : "食品",
+    "image" : "iconfood_40x40",
+    "mall" : "food"
+  },
+
+  {
+    "title" : "家电",
+    "image" : "iconelectrical_40x40",
+    "mall" : "electrical"
+  },
+
+  {
+    "title" : "日用",
+    "image" : "icondaily_40x40",
+    "mall" : "daily"
+  },
+
+  {
+    "title" : "运动户外",
+    "image" : "iconsport_40x40",
+    "mall" : "sport"
+  },
+]

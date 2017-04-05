@@ -26,9 +26,13 @@ const {width, height} = Dimensions.get('window');
 import CommunalNavBar from '../main/GDCommunalNavBar';
 import CommunalCell from '../main/GDCommunalCell';
 import CommunalDetail from '../main/GDCommunalDetail';
+import CommunalSiftMenu from '../main/GDCommunalSiftMenu';
 import HalfHourHot from './GDHalfHourHot';
 import Search from '../main/GDSearch';
 import NoDataView from '../main/GDNoDataView';
+
+// 数据
+import HomeSiftData from '../data/HomeSiftData.json';
 
 export default class GDHome extends Component {
 
@@ -39,7 +43,8 @@ export default class GDHome extends Component {
         this.state = {
             dataSource: new ListView.DataSource({rowHasChanged:(r1, r2) => r1 !== r2}),
             loaded:false,
-            isModal:false
+            isHalfHourHotModal:false,
+            isSiftModal:false,
         };
 
         this.data = [];
@@ -142,7 +147,7 @@ export default class GDHome extends Component {
     // 模态到近半小时热门
     pushToHalfHourHot() {
         this.setState({
-            isModal:true
+            isHalfHourHotModal:true
         })
     }
 
@@ -156,14 +161,23 @@ export default class GDHome extends Component {
     // 安卓模态销毁处理
     onRequestClose() {
         this.setState({
-            isModal:false
+            isHalfHourHotModal:false,
+            isSiftModal:false,
         })
     }
 
     // 关闭模态
     closeModal(data) {
         this.setState({
-            isModal:data
+            isHalfHourHotModal:data,
+            isSiftModal:data,
+        })
+    }
+
+    // 显示筛选菜单
+    showSiftMenu() {
+        this.setState({
+            isSiftModal:true,
         })
     }
 
@@ -181,7 +195,9 @@ export default class GDHome extends Component {
     // 返回中间按钮
     renderTitleItem() {
         return(
-            <TouchableOpacity>
+            <TouchableOpacity
+                onPress={() => {this.showSiftMenu()}}
+            >
                 <Image source={{uri:'navtitle_home_down_66x20'}} style={styles.navbarTitleItemStyle} />
             </TouchableOpacity>
         );
@@ -265,11 +281,11 @@ export default class GDHome extends Component {
     render() {
         return (
             <View style={styles.container}>
-                {/* 初始化模态 */}
+                {/* 初始化近半小时热门 */}
                 <Modal
                     animationType='slide'
                     transparent={false}
-                    visible={this.state.isModal}
+                    visible={this.state.isHalfHourHotModal}
                     onRequestClose={() => this.onRequestClose()}
                 >
                     <Navigator
@@ -285,6 +301,16 @@ export default class GDHome extends Component {
                                 {...route.params}
                                 navigator={navigator} />
                         }} />
+                </Modal>
+
+                {/* 初始化筛选菜单 */}
+                <Modal
+                    animationType='none'
+                    transparent={true}
+                    visible={this.state.isSiftModal}
+                    onRequestClose={() => this.onRequestClose()}
+                >
+                    <CommunalSiftMenu removeModal={(data) => this.closeModal(data)} data={HomeSiftData} />
                 </Modal>
 
                 {/* 导航栏样式 */}

@@ -137,16 +137,6 @@ export default class GDHalfHourHot extends Component {
         );
     }
 
-    componentWillMount() {
-        // 发送通知
-        DeviceEventEmitter.emit('isHiddenTabBar', true);
-    }
-
-    componentWillUnmount() {
-        // 发送通知
-        DeviceEventEmitter.emit('isHiddenTabBar', false);
-    }
-
     componentDidMount() {
         this.fetchData();
     }

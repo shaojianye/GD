@@ -1,0 +1,97 @@
+[
+  {
+    "title" : "全部",
+    "image" : "iconall_40x40",
+    "mall" : ""
+  },
+
+  {
+    "title" : "京东",
+    "image" : "iconjd_40x40",
+    "mall" : "京东商城"
+  },
+
+  {
+    "title" : "亚马逊中国",
+    "image" : "iconamazon_40x40",
+    "mall" : "亚马逊中国"
+  },
+
+  {
+    "title" : "天猫",
+    "image" : "icontmall_40x40",
+    "mall" : "天猫"
+  },
+
+  {
+    "title" : "数码",
+    "image" : "icondigital_40x40",
+    "mall" : "digital"
+  },
+
+  {
+    "title" : "母婴",
+    "image" : "iconbaby_40x40",
+    "mall" : "baby"
+  },
+
+  {
+    "title" : "服装",
+    "image" : "iconclothes_40x40",
+    "mall" : "clothes"
+  },
+
+  {
+    "title" : "食品",
+    "image" : "iconfood_40x40",
+    "mall" : "food"
+  },
+
+  {
+    "title" : "旅行",
+    "image" : "icontravel_40x40",
+    "mall" : "travel"
+  },
+
+  {
+    "title" : "家电",
+    "image" : "iconelectrical_40x40",
+    "mall" : "electrical"
+  },
+
+  {
+    "title" : "日用",
+    "image" : "icondaily_40x40",
+    "mall" : "daily"
+  },
+
+  {
+    "title" : "囤货",
+    "image" : "iconstockup_40x40",
+    "mall" : "stockup"
+  },
+
+  {
+    "title" : "运动户外",
+    "image" : "iconsport_40x40",
+    "mall" : "sport"
+  },
+
+  {
+    "title" : "美妆配饰",
+    "image" : "iconmakeup_40x40",
+    "mall" : "makeup"
+  },
+
+  {
+    "title" : "汽车用品",
+    "image" : "iconautomobile_40x40",
+    "mall" : "automobile"
+  },
+
+  {
+    "title" : "促销活动",
+    "image" : "iconsale_40x40",
+    "mall" : "sale"
+  }
+]
