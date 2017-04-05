@@ -133,6 +133,52 @@ export default class GDHome extends Component {
             })
     }
 
+    // 加载最新数据网络请求
+    loadSiftData(mall, cate) {
+
+        let params = {};
+
+        if (mall === "" && cate === "") {   // 全部
+            this.loadData(undefined);
+            return;
+        }
+
+        if (mall === "") {  // cate 有值
+            params = {
+                "cate" : cate
+            };
+        }else {
+            params = {
+                "mall" : mall
+            };
+        }
+
+
+        HTTPBase.get('https://guangdiu.com/api/getlist.php', params)
+            .then((responseData) => {
+
+                // 清空数组
+                this.data = [];
+
+                // 拼接数据
+                this.data = this.data.concat(responseData.data);
+
+                // 重新渲染
+                this.setState({
+                    dataSource: this.state.dataSource.cloneWithRows(this.data),
+                    loaded:true,
+                });
+
+                // 存储数组中最后一个元素的id
+                let cnlastID = responseData.data[responseData.data.length - 1].id;
+                AsyncStorage.setItem('cnlastID', cnlastID.toString());
+
+            })
+            .catch((error) => {
+
+            })
+    }
+
     // 加载更多数据操作
     loadMore() {
         // 读取id
@@ -310,7 +356,10 @@ export default class GDHome extends Component {
                     visible={this.state.isSiftModal}
                     onRequestClose={() => this.onRequestClose()}
                 >
-                    <CommunalSiftMenu removeModal={(data) => this.closeModal(data)} data={HomeSiftData} />
+                    <CommunalSiftMenu
+                        removeModal={(data) => this.closeModal(data)}
+                        data={HomeSiftData}
+                        loadSiftData={(mall, cate) => this.loadSiftData(mall, cate)} />
                 </Modal>
 
                 {/* 导航栏样式 */}

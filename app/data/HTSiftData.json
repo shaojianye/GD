@@ -2,72 +2,84 @@
   {
     "title" : "全部",
     "image" : "iconall_40x40",
-    "mall" : ""
+    "mall" : "",
+    "cate" : ""
   },
 
   {
     "title" : "Amazon",
     "image" : "iconamazon_40x40",
-    "mall" : "Amazon"
+    "mall" : "Amazon",
+    "cate" : ""
   },
 
   {
     "title" : "6pm",
     "image" : "icon6pm_40x40",
-    "mall" : "6pm"
+    "mall" : "6pm",
+    "cate" : ""
   },
 
   {
     "title" : "日本亚马逊",
     "image" : "iconamazon_40x40",
-    "mall" : "日本亚马逊"
+    "mall" : "日本亚马逊",
+    "cate" : ""
   },
 
   {
     "title" : "直邮中国",
     "image" : "iconzdirect_40x40",
-    "mall" : "zdirect"
+    "mall" : "",
+    "cate" : "zdirect"
   },
 
   {
     "title" : "数码",
     "image" : "icondigital_40x40",
-    "mall" : "digital"
+    "mall" : "",
+    "cate" : "digital"
   },
 
   {
     "title" : "母婴",
     "image" : "iconbaby_40x40",
-    "mall" : "baby"
+    "mall" : "",
+    "cate" : "baby"
   },
 
   {
     "title" : "服装",
     "image" : "iconclothes_40x40",
-    "mall" : "clothes"
+    "mall" : "",
+    "cate" : "clothes"
   },
 
   {
     "title" : "食品",
     "image" : "iconfood_40x40",
-    "mall" : "food"
+    "mall" : "",
+    "cate" : "food"
   },
 
   {
     "title" : "家电",
     "image" : "iconelectrical_40x40",
-    "mall" : "electrical"
+    "mall" : "",
+    "cate" : "electrical"
   },
 
   {
     "title" : "日用",
     "image" : "icondaily_40x40",
-    "mall" : "daily"
+    "mall" : "",
+    "cate" : "daily"
   },
 
   {
     "title" : "运动户外",
     "image" : "iconsport_40x40",
-    "mall" : "sport"
-  },
+    "mall" : "",
+    "cate" : "sport"
+  }
 ]

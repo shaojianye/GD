@@ -19,6 +19,7 @@ export default class GDCommunalSiftMenu extends Component {
 
     static defaultProps = {
         removeModal:{},
+        loadSiftData:{}
     };
 
     static propTypes = {
@@ -39,6 +40,12 @@ export default class GDCommunalSiftMenu extends Component {
         this.props.removeModal(data);
     }
 
+    // 点击事件
+    siftData(mall, cate) {
+        this.props.loadSiftData(mall, cate);
+        this.popToHome(false);
+    }
+
     // 处理数据
     loadData() {
         let data = [];
@@ -56,8 +63,14 @@ export default class GDCommunalSiftMenu extends Component {
     renderRow(rowData) {
         return(
             <View style={styles.itemViewStyle}>
-                <Image source={{uri:rowData.image}} style={styles.itemImageStyle} />
-                <Text>{rowData.title}</Text>
+                <TouchableOpacity
+                    onPress={() => this.siftData(rowData.mall, rowData.cate)}
+                >
+                    <View style={styles.itemViewStyle}>
+                        <Image source={{uri:rowData.image}} style={styles.itemImageStyle} />
+                        <Text>{rowData.title}</Text>
+                    </View>
+                </TouchableOpacity>
             </View>
         )
     }
@@ -68,35 +81,41 @@ export default class GDCommunalSiftMenu extends Component {
 
     render() {
         return(
+            <TouchableOpacity
+                onPress={() => this.popToHome(false)}
+                activeOpacity={1}
+            >
                 <View style={styles.container}>
                     {/* 菜单内容 */}
                     <ListView
                         dataSource={this.state.dataSource}
-                        renderRow={this.renderRow}
+                        renderRow={this.renderRow.bind(this)}
                         contentContainerStyle={styles.contentViewStyle}
                         initialListSize={16}
                     />
                 </View>
+            </TouchableOpacity>
         )
     }
 }
 
 const styles = StyleSheet.create({
     container: {
-        flex:1,
+        width:width,
+        height:height
     },
 
     contentViewStyle: {
         flexDirection:'row',
         flexWrap:'wrap',
         width: width,
-        top:Platform.OS === 'ios' ? 64 : 44
+        top:Platform.OS === 'ios' ? 64 : 44,
     },
 
     itemViewStyle: {
         width:width * 0.25,
         height:70,
-        backgroundColor:'green',
+        backgroundColor:'rgba(249,249,249,1.0)',
         justifyContent:'center',
         alignItems:'center'
     },

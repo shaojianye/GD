@@ -2,96 +2,112 @@
   {
     "title" : "全部",
     "image" : "iconall_40x40",
-    "mall" : ""
+    "mall" : "",
+    "cate" : ""
   },
 
   {
     "title" : "京东",
     "image" : "iconjd_40x40",
-    "mall" : "京东商城"
+    "mall" : "京东商城",
+    "cate" : ""
   },
 
   {
     "title" : "亚马逊中国",
     "image" : "iconamazon_40x40",
-    "mall" : "亚马逊中国"
+    "mall" : "亚马逊中国",
+    "cate" : ""
   },
 
   {
     "title" : "天猫",
     "image" : "icontmall_40x40",
-    "mall" : "天猫"
+    "mall" : "天猫",
+    "cate" : ""
   },
 
   {
     "title" : "数码",
     "image" : "icondigital_40x40",
-    "mall" : "digital"
+    "mall" : "",
+    "cate" : "digital"
   },
 
   {
     "title" : "母婴",
     "image" : "iconbaby_40x40",
-    "mall" : "baby"
+    "mall" : "",
+    "cate" : "baby"
   },
 
   {
     "title" : "服装",
     "image" : "iconclothes_40x40",
-    "mall" : "clothes"
+    "mall" : "",
+    "cate" : "clothes"
   },
 
   {
     "title" : "食品",
     "image" : "iconfood_40x40",
-    "mall" : "food"
+    "mall" : "",
+    "cate" : "food"
   },
 
   {
     "title" : "旅行",
     "image" : "icontravel_40x40",
-    "mall" : "travel"
+    "mall" : "",
+    "cate" : "travel"
   },
 
   {
     "title" : "家电",
     "image" : "iconelectrical_40x40",
-    "mall" : "electrical"
+    "mall" : "",
+    "cate" : "electrical"
   },
 
   {
     "title" : "日用",
     "image" : "icondaily_40x40",
-    "mall" : "daily"
+    "mall" : "",
+    "cate" : "daily"
   },
 
   {
     "title" : "囤货",
     "image" : "iconstockup_40x40",
-    "mall" : "stockup"
+    "mall" : "",
+    "cate" : "stockup"
   },
 
   {
     "title" : "运动户外",
     "image" : "iconsport_40x40",
-    "mall" : "sport"
+    "mall" : "",
+    "cate" : "sport"
   },
 
   {
     "title" : "美妆配饰",
     "image" : "iconmakeup_40x40",
-    "mall" : "makeup"
+    "mall" : "",
+    "cate" : "makeup"
   },
 
   {
     "title" : "汽车用品",
     "image" : "iconautomobile_40x40",
-    "mall" : "automobile"
+    "mall" : "",
+    "cate" : "automobile"
   },
 
   {
     "title" : "促销活动",
     "image" : "iconsale_40x40",
-    "mall" : "sale"
+    "mall" : "",
+    "cate" : "sale"
   }
 ]
