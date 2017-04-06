@@ -16,6 +16,7 @@ import {
     Modal,
     AsyncStorage,
     TextInput,
+    DeviceEventEmitter,
 } from 'react-native';
 
 
@@ -225,6 +226,18 @@ export default class GDHome extends Component {
                 />
             );
         }
+    }
+
+    // 准备加载组件
+    componentWillMount() {
+        // 发送通知
+        DeviceEventEmitter.emit('isHiddenTabBar', true);
+    }
+
+    // 准备销毁组件
+    componentWillUnmount() {
+        // 发送通知
+        DeviceEventEmitter.emit('isHiddenTabBar', false);
     }
 
     render() {
