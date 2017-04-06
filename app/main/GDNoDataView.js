@@ -9,6 +9,7 @@ import {
     Text,
 } from 'react-native';
 
+
 export default class GDNoDataView extends Component {
 
     render() {

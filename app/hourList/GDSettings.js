@@ -11,14 +11,23 @@ import {
     Text,
 } from 'react-native';
 
+
 // 引用文件
 import CommunalNavBar from '../main/GDCommunalNavBar';
 import SettingsCell from './GDSettingsCell';
+
 
 export default class GDSettings extends Component {
     // 返回
     pop() {
         this.props.navigator.pop();
+    }
+
+    // 返回中间按钮
+    renderTitleItem() {
+        return(
+            <Text style={styles.navbarTitleItemStyle}>设置</Text>
+        );
     }
 
     // 返回左边按钮
@@ -33,13 +42,6 @@ export default class GDSettings extends Component {
                 </View>
 
             </TouchableOpacity>
-        );
-    }
-
-    // 返回中间按钮
-    renderTitleItem() {
-        return(
-            <Text style={styles.navbarTitleItemStyle}>设置</Text>
         );
     }
 

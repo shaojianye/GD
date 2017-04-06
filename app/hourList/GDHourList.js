@@ -17,10 +17,12 @@ import {
     AsyncStorage,
 } from 'react-native';
 
+
+// 获取屏幕尺寸
+const {width, height} = Dimensions.get('window');
+
 // 第三方
 import {PullList} from 'react-native-pull';
-
-const {width, height} = Dimensions.get('window');
 
 // 引用外部文件
 import CommunalNavBar from '../main/GDCommunalNavBar';
@@ -28,6 +30,7 @@ import CommunalCell from '../main/GDCommunalCell';
 import CommunalDetail from '../main/GDCommunalDetail';
 import NoDataView from '../main/GDNoDataView';
 import Settings from './GDSettings';
+
 
 export default class GDHourList extends Component {
 
@@ -37,36 +40,40 @@ export default class GDHourList extends Component {
         // 初始状态
         this.state = {
             dataSource: new ListView.DataSource({rowHasChanged:(r1, r2) => r1 !== r2}),
-            loaded:false,
-            prompt:'',
-            isNextTouch:false
+            loaded:false,       // 是否初始化 ListView
+            prompt:'',          // 标题栏状态
+            isNextTouch:false   // 下一小时按钮状态
         };
 
-        this.nexthourhour = '';
-        this.nexthourdate = '';
-        this.lasthourhour = '';
-        this.lasthourdate = '';
+        this.nexthourhour = '';     // 下一小时时间
+        this.nexthourdate = '';     // 下一小时日期
+        this.lasthourhour = '';     // 上一小时时间
+        this.lasthourdate = '';     // 上一小时日期
+
+        // 绑定操作
         this.loadData = this.loadData.bind(this);
     }
 
     // 加载最新数据网络请求
     loadData(resolve, date, hour) {
+        // 初始化参数对象
         let params = {};
 
-        if (date) {
+        if (date) {     // 时间有值时
             params = {
                 "date" : date,
                 "hour" : hour
             }
         }
 
+        // 请求相应时间段数据
         HTTPBase.get('http://guangdiu.com/api/getranklist.php', params)
             .then((responseData) => {
 
                 let isNextTouch = true;
 
-                if (responseData.hasnexthour == 1) {
-                    isNextTouch = false
+                if (responseData.hasnexthour == 1) {    // hasnexthour不为0时 下一小时 按钮可点击
+                    isNextTouch = false;
                 }
 
                 // 重新渲染
@@ -84,13 +91,13 @@ export default class GDHourList extends Component {
                     }, 1000);
                 }
 
-                // 暂时保留一些数据
+                // 需要缓存的数据
                 this.nexthourhour = responseData.nexthourhour;
                 this.nexthourdate = responseData.nexthourdate;
                 this.lasthourhour = responseData.lasthourhour;
                 this.lasthourdate = responseData.lasthourdate;
             })
-            .catch((error) => {
+            .catch((error) => {     // 网络问题处理
 
             })
     }
@@ -102,10 +109,30 @@ export default class GDHourList extends Component {
         })
     }
 
+    // 跳转到详情页
+    pushToDetail(value) {
+        this.props.navigator.push({
+            component:CommunalDetail,
+            params: {
+                url: 'https://guangdiu.com/api/showdetail.php' + '?' + 'id=' + value
+            }
+        })
+    }
+
+    // 上一小时点击事件
+    lastHour() {
+        this.loadData(undefined, this.lasthourdate, this.lasthourhour);
+    }
+
+    // 下一小时点击事件
+    nextHour() {
+        this.loadData(undefined, this.nexthourdate, this.nexthourhour);
+    }
+
     // 返回中间标题
     renderTitleItem() {
         return(
-            <Image source={{uri:'navtitle_rank_106x20'}} style={styles.navbarTitleItemStyle} />
+            <Image source={{uri:'navtitle_rank_106x20'}} style={styles.navBarTitleItemStyle} />
         );
     }
 
@@ -115,39 +142,9 @@ export default class GDHourList extends Component {
             <TouchableOpacity
                 onPress={()=>{this.pushToSettings()}}
             >
-                <Text style={styles.navbarRightItemStyle}>设置</Text>
+                <Text style={styles.navBarRightItemStyle}>设置</Text>
             </TouchableOpacity>
         );
-    }
-
-    // 根据网络状态决定是否渲染 listview
-    renderListView() {
-        if (this.state.loaded === false) {
-            return(
-                <NoDataView />
-            );
-        }else {
-            return(
-                <PullList
-                    onPullRelease={(resolve) => this.loadData(resolve)}
-                    dataSource={this.state.dataSource}
-                    renderRow={this.renderRow.bind(this)}
-                    showsHorizontalScrollIndicator={false}
-                    style={styles.listViewStyle}
-                    initialListSize={5}
-                />
-            );
-        }
-    }
-
-    // 跳转到详情页
-    pushToDetail(value) {
-        this.props.navigator.push({
-            component:CommunalDetail,
-            params: {
-                url: 'https://guangdiu.com/api/showdetail.php' + '?' + 'id=' + value
-            }
-        })
     }
 
     // 返回每一行cell的样式
@@ -167,16 +164,30 @@ export default class GDHourList extends Component {
         );
     }
 
+    // 根据网络状态决定是否渲染 ListView
+    renderListView() {
+        if (this.state.loaded === false) {
+            return(
+                <NoDataView />
+            );
+        }else {
+            return(
+                <PullList
+                    onPullRelease={(resolve) => this.loadData(resolve)}
+                    dataSource={this.state.dataSource}
+                    renderRow={this.renderRow.bind(this)}
+                    showsHorizontalScrollIndicator={false}
+                    style={styles.listViewStyle}
+                    initialListSize={5}
+                />
+            );
+        }
+    }
+
+    // 进入页面
     componentDidMount() {
+        // 刷新数据
         this.loadData();
-    }
-
-    lastHour() {
-        this.loadData(undefined, this.lasthourdate, this.lasthourhour);
-    }
-
-    nextHour() {
-        this.loadData(undefined, this.nexthourdate, this.nexthourhour);
     }
 
     render() {
@@ -198,12 +209,14 @@ export default class GDHourList extends Component {
 
                 {/* 操作栏 */}
                 <View style={styles.operationViewStyle}>
+                    {/* 上一小时按钮 */}
                     <TouchableOpacity
                         onPress={() => this.lastHour()}
                     >
                         <Text style={{marginRight:10, fontSize:17, color:'green'}}>{"< " + "上1小时"}</Text>
                     </TouchableOpacity>
 
+                    {/* 下一小时按钮 */}
                     <TouchableOpacity
                         onPress={() => this.nextHour()}
                         disabled={this.state.isNextTouch}
@@ -223,12 +236,12 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
     },
 
-    navbarTitleItemStyle: {
+    navBarTitleItemStyle: {
         width:106,
         height:20,
         marginLeft:50
     },
-    navbarRightItemStyle: {
+    navBarRightItemStyle: {
         fontSize:17,
         color:'rgba(123,178,114,1.0)',
         marginRight:15,

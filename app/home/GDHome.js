@@ -17,10 +17,14 @@ import {
     AsyncStorage,
 } from 'react-native';
 
+
+// 获取屏幕尺寸
+const {width, height} = Dimensions.get('window');
+// 数据
+import HomeSiftData from '../data/HomeSiftData.json';
+
 // 第三方
 import {PullList} from 'react-native-pull';
-
-const {width, height} = Dimensions.get('window');
 
 // 引用外部文件
 import CommunalNavBar from '../main/GDCommunalNavBar';
@@ -31,8 +35,6 @@ import HalfHourHot from './GDHalfHourHot';
 import Search from '../main/GDSearch';
 import NoDataView from '../main/GDNoDataView';
 
-// 数据
-import HomeSiftData from '../data/HomeSiftData.json';
 
 export default class GDHome extends Component {
 
@@ -42,12 +44,14 @@ export default class GDHome extends Component {
         // 初始状态
         this.state = {
             dataSource: new ListView.DataSource({rowHasChanged:(r1, r2) => r1 !== r2}),
-            loaded:false,
-            isHalfHourHotModal:false,
-            isSiftModal:false,
+            loaded:false,                   // 是否初始化 ListView
+            isHalfHourHotModal:false,       // 近半小时热门状态
+            isSiftModal:false,              // 筛选菜单状态
         };
 
         this.data = [];
+
+        // 绑定操作
         this.loadData = this.loadData.bind(this);
         this.loadMore = this.loadMore.bind(this);
     }
@@ -108,11 +112,13 @@ export default class GDHome extends Component {
     // 加载更多数据的网络请求
     loadMoreData(value) {
 
+        // 初始化参数对象
         let params = {
             "count" : 10,
             "sinceid" : value
         };
 
+        // 加载更多数据请求
         HTTPBase.get('https://guangdiu.com/api/getlist.php', params)
             .then((responseData) => {
 
@@ -129,13 +135,14 @@ export default class GDHome extends Component {
                 AsyncStorage.setItem('cnlastID', cnlastID.toString());
             })
             .catch((error) => {
-
+                // 网络等问题处理
             })
     }
 
-    // 加载最新数据网络请求
+    // 加载筛选数据网络请求
     loadSiftData(mall, cate) {
 
+        // 初始化参数对象
         let params = {};
 
         if (mall === "" && cate === "") {   // 全部
@@ -153,7 +160,7 @@ export default class GDHome extends Component {
             };
         }
 
-
+        // 筛选请求
         HTTPBase.get('https://guangdiu.com/api/getlist.php', params)
             .then((responseData) => {
 
@@ -175,7 +182,7 @@ export default class GDHome extends Component {
 
             })
             .catch((error) => {
-
+                // 网络等问题处理
             })
     }
 
@@ -184,7 +191,7 @@ export default class GDHome extends Component {
         // 读取id
         AsyncStorage.getItem('cnlastID')
             .then((value) => {
-                // 数据加载操作
+                // 加载更多数据
                 this.loadMoreData(value);
             })
 
@@ -227,13 +234,23 @@ export default class GDHome extends Component {
         })
     }
 
+    // 跳转到详情页
+    pushToDetail(value) {
+        this.props.navigator.push({
+            component:CommunalDetail,
+            params: {
+                url: 'https://guangdiu.com/api/showdetail.php' + '?' + 'id=' + value
+            }
+        })
+    }
+
     // 返回左边按钮
     renderLeftItem() {
         return(
             <TouchableOpacity
                 onPress={() => {this.pushToHalfHourHot()}}
             >
-                <Image source={{uri:'hot_icon_20x20'}} style={styles.navbarLeftItemStyle} />
+                <Image source={{uri:'hot_icon_20x20'}} style={styles.navBarLeftItemStyle} />
             </TouchableOpacity>
         );
     }
@@ -244,7 +261,7 @@ export default class GDHome extends Component {
             <TouchableOpacity
                 onPress={() => {this.showSiftMenu()}}
             >
-                <Image source={{uri:'navtitle_home_down_66x20'}} style={styles.navbarTitleItemStyle} />
+                <Image source={{uri:'navtitle_home_down_66x20'}} style={styles.navBarTitleItemStyle} />
             </TouchableOpacity>
         );
     }
@@ -255,7 +272,7 @@ export default class GDHome extends Component {
             <TouchableOpacity
                 onPress={()=>{this.pushToSearch()}}
             >
-                <Image source={{uri:'search_icon_20x20'}} style={styles.navbarRightItemStyle} />
+                <Image source={{uri:'search_icon_20x20'}} style={styles.navBarRightItemStyle} />
             </TouchableOpacity>
         );
     }
@@ -267,40 +284,6 @@ export default class GDHome extends Component {
                 <ActivityIndicator />
             </View>
         );
-    }
-
-    // 根据网络状态决定是否渲染 listview
-    renderListView() {
-        if (this.state.loaded === false) {
-            return(
-                <NoDataView />
-            );
-        }else {
-            return(
-                <PullList
-                    onPullRelease={(resolve) => this.loadData(resolve)}
-                    dataSource={this.state.dataSource}
-                    renderRow={this.renderRow.bind(this)}
-                    showsHorizontalScrollIndicator={false}
-                    style={styles.listViewStyle}
-                    initialListSize={5}
-                    renderHeader={this.renderHeader}
-                    onEndReached={this.loadMore}
-                    onEndReachedThreshold={60}
-                    renderFooter={this.renderFooter}
-                />
-            );
-        }
-    }
-
-    // 跳转到详情页
-    pushToDetail(value) {
-        this.props.navigator.push({
-            component:CommunalDetail,
-            params: {
-                url: 'https://guangdiu.com/api/showdetail.php' + '?' + 'id=' + value
-            }
-        })
     }
 
     // 返回每一行cell的样式
@@ -320,7 +303,33 @@ export default class GDHome extends Component {
         );
     }
 
+    // 根据网络状态决定是否渲染 listview
+    renderListView() {
+        if (this.state.loaded === false) {
+            return(
+                <NoDataView />
+            );
+        }else {
+            return(
+                <PullList
+                    onPullRelease={(resolve) => this.loadData(resolve)}     // 下拉刷新操作
+                    dataSource={this.state.dataSource}          // 设置数据源
+                    renderRow={this.renderRow.bind(this)}       // 根据数据创建相应 cell
+                    showsHorizontalScrollIndicator={false}      // 隐藏水平指示器
+                    style={styles.listViewStyle}                // 样式
+                    initialListSize={7}                         // 优化:一次渲染几条数据
+                    renderHeader={this.renderHeader}            // 设置头部视图
+                    onEndReached={this.loadMore}                // 当接近底部特定距离时调用
+                    onEndReachedThreshold={60}                  // 当接近底部60时调用
+                    renderFooter={this.renderFooter}            // 设置尾部视图
+                />
+            );
+        }
+    }
+
+    // 组件加载完成
     componentDidMount() {
+        // 刷新数据
         this.loadData();
     }
 
@@ -332,8 +341,9 @@ export default class GDHome extends Component {
                     animationType='slide'
                     transparent={false}
                     visible={this.state.isHalfHourHotModal}
-                    onRequestClose={() => this.onRequestClose()}
-                >
+                    onRequestClose={() => this.onRequestClose()} >
+
+                    {/* 包装导航功能 */}
                     <Navigator
                         initialRoute={{
                             name:'halfHourHot',
@@ -383,16 +393,16 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
     },
 
-    navbarLeftItemStyle: {
+    navBarLeftItemStyle: {
         width:20,
         height:20,
         marginLeft:15,
     },
-    navbarTitleItemStyle: {
+    navBarTitleItemStyle: {
         width:66,
         height:20,
     },
-    navbarRightItemStyle: {
+    navBarRightItemStyle: {
         width:20,
         height:20,
         marginRight:15,

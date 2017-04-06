@@ -17,10 +17,12 @@ import {
     DeviceEventEmitter,
 } from 'react-native';
 
+
+// 获取屏幕尺寸
+const {width, height} = Dimensions.get('window');
+
 // 第三方
 import {PullList} from 'react-native-pull';
-
-const {width, height} = Dimensions.get('window');
 
 // 引用外部文件
 import CommunalNavBar from '../main/GDCommunalNavBar';
@@ -31,19 +33,21 @@ import NoDataView from '../main/GDNoDataView';
 
 export default class GDUSHalfHourHot extends Component {
 
+    static defaultProps = {
+        removeModal:{}  // 销毁模态回调
+    };
+
     // 构造
     constructor(props) {
         super(props);
         // 初始状态
         this.state = {
             dataSource: new ListView.DataSource({rowHasChanged:(r1, r2) => r1 !== r2}),
-            loaded:true,
+            loaded:false,       // 是否初始化 ListView
         };
-        this.fetchData = this.fetchData.bind(this);
-    }
 
-    static defaultProps = {
-        removeModal:{}
+        // 绑定操作
+        this.fetchData = this.fetchData.bind(this);
     }
 
     // 网络请求
@@ -69,56 +73,9 @@ export default class GDUSHalfHourHot extends Component {
             })
     }
 
-    popToHome(data) {
+    // 返回
+    pop(data) {
         this.props.removeModal(data);
-    }
-
-    // 返回中间按钮
-    renderTitleItem() {
-        return(
-            <Text style={styles.navbarTitleItemStyle}>近半小时热门</Text>
-        );
-    }
-
-    // 返回右边按钮
-    renderRightItem() {
-        return(
-            <TouchableOpacity
-                onPress={()=>{this.popToHome(false)}}
-            >
-                <Text style={styles.navbarRightItemStyle}>关闭</Text>
-            </TouchableOpacity>
-        );
-    }
-
-    // 根据网络状态决定是否渲染 listview
-    renderListView() {
-        if (this.state.loaded === false) {
-            return(
-                <NoDataView />
-            );
-        }else {
-            return(
-                <PullList
-                    onPullRelease={(resolve) => this.fetchData(resolve)}
-                    dataSource={this.state.dataSource}
-                    renderRow={this.renderRow.bind(this)}
-                    showsHorizontalScrollIndicator={false}
-                    style={styles.listViewStyle}
-                    initialListSize={5}
-                    renderHeader={this.renderHeader}
-                />
-            );
-        }
-    }
-
-    // 返回 listview 头部
-    renderHeader() {
-        return (
-            <View style={styles.headerPromptStyle}>
-                <Text>根据每条折扣的点击进行统计,每5分钟更新一次</Text>
-            </View>
-        );
     }
 
     // 跳转到详情页
@@ -129,6 +86,33 @@ export default class GDUSHalfHourHot extends Component {
                 url: 'https://guangdiu.com/api/showdetail.php' + '?' + 'id=' + value
             }
         })
+    }
+
+    // 返回中间按钮
+    renderTitleItem() {
+        return(
+            <Text style={styles.navBarTitleItemStyle}>近半小时热门</Text>
+        );
+    }
+
+    // 返回右边按钮
+    renderRightItem() {
+        return(
+            <TouchableOpacity
+                onPress={()=>{this.pop(false)}}
+            >
+                <Text style={styles.navBarRightItemStyle}>关闭</Text>
+            </TouchableOpacity>
+        );
+    }
+
+    // 返回 listview 头部
+    renderHeader() {
+        return (
+            <View style={styles.headerPromptStyle}>
+                <Text>根据每条折扣的点击进行统计,每5分钟更新一次</Text>
+            </View>
+        );
     }
 
     // 返回每一行cell的样式
@@ -145,17 +129,30 @@ export default class GDUSHalfHourHot extends Component {
         );
     }
 
-    componentWillMount() {
-        // 发送通知
-        DeviceEventEmitter.emit('isHiddenTabBar', true);
+    // 根据网络状态决定是否渲染 ListView
+    renderListView() {
+        if (this.state.loaded === false) {
+            return(
+                <NoDataView />
+            );
+        }else {
+            return(
+                <PullList
+                    onPullRelease={(resolve) => this.fetchData(resolve)}    // 下拉刷新操作
+                    dataSource={this.state.dataSource}          // 设置数据源
+                    renderRow={this.renderRow.bind(this)}       // 根据数据创建相应 cell
+                    showsHorizontalScrollIndicator={false}      // 隐藏水平指示器
+                    style={styles.listViewStyle}                // 样式
+                    initialListSize={7}                         // 优化:一次渲染几条数据
+                    renderHeader={this.renderHeader}            // 设置头部视图
+                />
+            );
+        }
     }
 
-    componentWillUnmount() {
-        // 发送通知
-        DeviceEventEmitter.emit('isHiddenTabBar', false);
-    }
-
+    // 组件加载完成
     componentDidMount() {
+        // 加载最新数据
         this.fetchData();
     }
 
@@ -181,12 +178,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
 
-    navbarTitleItemStyle: {
+    navBarTitleItemStyle: {
         fontSize:17,
         color:'black',
         marginLeft:50
     },
-    navbarRightItemStyle: {
+    navBarRightItemStyle: {
         fontSize:17,
         color:'rgba(123,178,114,1.0)',
         marginRight:15

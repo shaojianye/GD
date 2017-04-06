@@ -47,7 +47,7 @@ HTTPBase.get = function (url, params, headers) {
             })
             .done();
     })
-}
+};
 
 
 /**
@@ -87,7 +87,7 @@ HTTPBase.post = function (url, params, headers) {
             })
             .done();
     })
-}
+};
 
 
 global.HTTPBase = HTTPBase;

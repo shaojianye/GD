@@ -13,13 +13,16 @@ import {
     Platform,
 } from 'react-native';
 
+
+// 获取屏幕尺寸
 const {width, height} = Dimensions.get('window');
+
 
 export default class GDCommunalSiftMenu extends Component {
 
     static defaultProps = {
-        removeModal:{},
-        loadSiftData:{}
+        removeModal:{},     // 销毁模态回调
+        loadSiftData:{}     // 筛选菜单回调
     };
 
     static propTypes = {
@@ -48,8 +51,10 @@ export default class GDCommunalSiftMenu extends Component {
 
     // 处理数据
     loadData() {
+        // 清空数组
         let data = [];
 
+        // 将数据放入数组
         for (let i = 0; i<this.props.data.length; i++) {
             data.push(this.props.data[i]);
         }
@@ -60,6 +65,7 @@ export default class GDCommunalSiftMenu extends Component {
         })
     }
 
+    // 返回一行 Cell
     renderRow(rowData) {
         return(
             <View style={styles.itemViewStyle}>
@@ -75,7 +81,9 @@ export default class GDCommunalSiftMenu extends Component {
         )
     }
 
+    // 组件加载完成
     componentDidMount() {
+        // 加载 Item 数据
         this.loadData();
     }
 
@@ -88,10 +96,10 @@ export default class GDCommunalSiftMenu extends Component {
                 <View style={styles.container}>
                     {/* 菜单内容 */}
                     <ListView
-                        dataSource={this.state.dataSource}
-                        renderRow={this.renderRow.bind(this)}
-                        contentContainerStyle={styles.contentViewStyle}
-                        initialListSize={16}
+                        dataSource={this.state.dataSource}                  // 设置数据源
+                        renderRow={this.renderRow.bind(this)}               // 根据数据初始化 Cell
+                        contentContainerStyle={styles.contentViewStyle}     // 样式
+                        initialListSize={16}                                // 一次性渲染几行数据
                     />
                 </View>
             </TouchableOpacity>

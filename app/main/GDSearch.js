@@ -18,17 +18,19 @@ import {
     TextInput,
 } from 'react-native';
 
+
+const {width, height} = Dimensions.get('window');       // 获取屏幕尺寸
+const dismissKeyboard = require('dismissKeyboard');     // 获取键盘回收方法
+
 // 第三方
 import {PullList} from 'react-native-pull';
-
-const {width, height} = Dimensions.get('window');
-const dismissKeyboard = require('dismissKeyboard');
 
 // 引用外部文件
 import CommunalNavBar from '../main/GDCommunalNavBar';
 import CommunalCell from '../main/GDCommunalCell';
 import CommunalDetail from '../main/GDCommunalDetail';
 import NoDataView from '../main/GDNoDataView';
+
 
 export default class GDHome extends Component {
 
@@ -38,12 +40,13 @@ export default class GDHome extends Component {
         // 初始状态
         this.state = {
             dataSource: new ListView.DataSource({rowHasChanged:(r1, r2) => r1 !== r2}),
-            loaded:false,
-            isModal:false
+            loaded:false,       // 是否初始化 ListView
         };
 
         this.data = [];
-        this.changeText = '';
+        this.changeText = '';                       // 改变后的文本
+
+        // 绑定操作
         this.loadData = this.loadData.bind(this);
         this.loadMore = this.loadMore.bind(this);
     }
@@ -51,12 +54,15 @@ export default class GDHome extends Component {
     // 加载最新数据网络请求
     loadData(resolve) {
 
+        // 文本是否为空
         if (!this.changeText) return;
 
+        // 初始化参数对象
         let params = {
             "q" : this.changeText
         };
 
+        // 加载最新数据请求
         HTTPBase.get('http://guangdiu.com/api/getresult.php', params)
             .then((responseData) => {
 
@@ -92,11 +98,13 @@ export default class GDHome extends Component {
     // 加载更多数据的网络请求
     loadMoreData(value) {
 
+        // 初始化参数对象
         let params = {
             "q" : this.changeText,
             "sinceid" : value
         };
 
+        // 加载更多请求
         HTTPBase.get('http://guangdiu.com/api/getresult.php', params)
             .then((responseData) => {
 
@@ -136,6 +144,16 @@ export default class GDHome extends Component {
         this.props.navigator.pop();
     }
 
+    // 跳转到详情页
+    pushToDetail(value) {
+        this.props.navigator.push({
+            component:CommunalDetail,
+            params: {
+                url: 'https://guangdiu.com/api/showdetail.php' + '?' + 'id=' + value
+            }
+        })
+    }
+
     // 返回左边按钮
     renderLeftItem() {
         return(
@@ -143,7 +161,7 @@ export default class GDHome extends Component {
                 onPress={() => {this.pop()}}
             >
                 <View style={{flexDirection:'row', alignItems:'center'}}>
-                    <Image source={{uri:'back'}} style={styles.navbarLeftItemStyle} />
+                    <Image source={{uri:'back'}} style={styles.navBarLeftItemStyle} />
                     <Text>返回</Text>
                 </View>
 
@@ -154,7 +172,7 @@ export default class GDHome extends Component {
     // 返回中间按钮
     renderTitleItem() {
         return(
-            <Text style={styles.navbarTitleItemStyle}>搜索全网折扣</Text>
+            <Text style={styles.navBarTitleItemStyle}>搜索全网折扣</Text>
         );
     }
 
@@ -162,43 +180,10 @@ export default class GDHome extends Component {
     renderFooter() {
         return (
             <View style={{height: 100}}>
+                {/* 旋转的小菊花 */}
                 <ActivityIndicator />
             </View>
         );
-    }
-
-    // 根据网络状态决定是否渲染 listview
-    renderListView() {
-        if (this.state.loaded === false) {
-            return(
-                <NoDataView />
-            );
-        }else {
-            return(
-                <PullList
-                    onPullRelease={(resolve) => this.loadData(resolve)}
-                    dataSource={this.state.dataSource}
-                    renderRow={this.renderRow.bind(this)}
-                    showsHorizontalScrollIndicator={false}
-                    style={styles.listViewStyle}
-                    initialListSize={5}
-                    renderHeader={this.renderHeader}
-                    onEndReached={this.loadMore}
-                    onEndReachedThreshold={60}
-                    renderFooter={this.renderFooter}
-                />
-            );
-        }
-    }
-
-    // 跳转到详情页
-    pushToDetail(value) {
-        this.props.navigator.push({
-            component:CommunalDetail,
-            params: {
-                url: 'https://guangdiu.com/api/showdetail.php' + '?' + 'id=' + value
-            }
-        })
     }
 
     // 返回每一行cell的样式
@@ -218,6 +203,30 @@ export default class GDHome extends Component {
         );
     }
 
+    // 根据网络状态决定是否渲染 ListView
+    renderListView() {
+        if (this.state.loaded === false) {      // 无数据
+            return(
+                <NoDataView />
+            );
+        }else {
+            return(     // 有数据
+                <PullList
+                    onPullRelease={(resolve) => this.loadData(resolve)}     // 下拉刷新操作
+                    dataSource={this.state.dataSource}          // 设置数据源
+                    renderRow={this.renderRow.bind(this)}       // 根据数据创建相应 cell
+                    showsHorizontalScrollIndicator={false}      // 隐藏水平指示器
+                    style={styles.listViewStyle}                // 样式
+                    initialListSize={7}                         // 优化:一次渲染几条数据
+                    renderHeader={this.renderHeader}            // 设置头部视图
+                    onEndReached={this.loadMore}                // 当接近底部特定距离时调用
+                    onEndReachedThreshold={60}                  // 当接近底部60时调用
+                    renderFooter={this.renderFooter}            // 设置尾部视图
+                />
+            );
+        }
+    }
+
     render() {
         return (
             <View style={styles.container}>
@@ -229,6 +238,7 @@ export default class GDHome extends Component {
 
                 {/* 顶部工具栏 */}
                 <View style={styles.toolsViewStyle} >
+
                     {/* 左边 */}
                     <View style={styles.inputViewStyle} >
                         <Image source={{uri:'search_icon_20x20'}} style={styles.searchImageStyle} />
@@ -252,6 +262,7 @@ export default class GDHome extends Component {
                             <Text style={{color:'green'}}>取消</Text>
                         </TouchableOpacity>
                     </View>
+
                 </View>
 
                 {/* 根据网络状态决定是否渲染 listview */}
@@ -268,20 +279,15 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
     },
 
-    navbarLeftItemStyle: {
+    navBarLeftItemStyle: {
         width:20,
         height:20,
         marginLeft:15,
     },
-    navbarTitleItemStyle: {
+    navBarTitleItemStyle: {
         fontSize:17,
         color:'black',
         marginRight:50
-    },
-    navbarRightItemStyle: {
-        width:20,
-        height:20,
-        marginRight:15,
     },
 
     toolsViewStyle: {

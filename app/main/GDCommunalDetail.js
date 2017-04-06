@@ -11,8 +11,10 @@ import {
     DeviceEventEmitter,
 } from 'react-native';
 
+
 // 引入外部文件
 import CommunalNavBar from './GDCommunalNavBar';
+
 
 export default class GDCommunalDetail extends Component {
 
@@ -36,11 +38,13 @@ export default class GDCommunalDetail extends Component {
         );
     }
 
+    // 准备加载组件
     componentWillMount() {
         // 发送通知
         DeviceEventEmitter.emit('isHiddenTabBar', true);
     }
 
+    // 准备销毁组件
     componentWillUnmount() {
         // 发送通知
         DeviceEventEmitter.emit('isHiddenTabBar', false);
@@ -56,11 +60,11 @@ export default class GDCommunalDetail extends Component {
 
                 {/* 初始化WebView */}
                 <WebView
-                    style={styles.webViewStyle}
-                    source={{url:this.props.url, method: 'GET' }}
-                    javaScriptEnabled={true}
-                    domStorageEnabled={true}
-                    scalesPageToFit={false}
+                    style={styles.webViewStyle}                     // 样式
+                    source={{uri:this.props.url, method: 'GET' }}   // 路径(uri:路径, method:请求方式)
+                    javaScriptEnabled={true}                        // 安卓平台允许javaScript
+                    domStorageEnabled={true}                        // 安卓平台允许DOM本地存储
+                    scalesPageToFit={false}                         // 不允许网页缩放或用户改变缩放比例
                 />
             </View>
         );

@@ -12,7 +12,10 @@ import {
     Image,
 } from 'react-native';
 
+
+// 获取屏幕尺寸
 const {width, height} = Dimensions.get('window');
+
 
 export default class GDCommunalCell extends Component {
 
@@ -24,6 +27,7 @@ export default class GDCommunalCell extends Component {
         fromSite:PropTypes.string,
     };
 
+    // 返回时间计算结果
     renderDate(pubTime, fromSite) {
 
         // 时间差的计算
@@ -59,7 +63,7 @@ export default class GDCommunalCell extends Component {
             result = parseInt(minuteC) + "分钟前";
         }else result = "刚刚";
 
-        return result + ' · ' + fromSite;
+        return result + ' · ' + fromSite;       // 拼接
 
     }
 
@@ -68,12 +72,14 @@ export default class GDCommunalCell extends Component {
             <View style={styles.container}>
                 {/* 左边图片 */}
                 <Image source={{uri:this.props.image === '' ? 'defaullt_thumb_83x83' : this.props.image}} style={styles.imageStyle} />
+
                 {/* 中间 */}
                 <View style={styles.centerViewStyle}>
                     {/* 标题 */}
                     <View>
                         <Text numberOfLines={3} style={styles.titleStyle}>{this.props.title}</Text>
                     </View>
+
                     {/* 详情 */}
                     <View style={styles.detailViewStyle}>
                         {/* 平台 */}
@@ -83,6 +89,7 @@ export default class GDCommunalCell extends Component {
                     </View>
 
                 </View>
+
                 {/* 右边的箭头 */}
                 <Image source={{uri:'icon_cell_rightArrow'}} style={styles.arrowStyle} />
             </View>

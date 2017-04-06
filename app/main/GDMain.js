@@ -32,25 +32,32 @@ export default class GD extends Component {
         super(props);
         // 初始状态
         this.state = {
-            selectedTab:'home',
-            isHiddenTabBar:false,   // 是否隐藏tabbar
-            cnbadgeText:'',
-            usbadgeText:''
+            selectedTab:'home',     // 首选页面
+            isHiddenTabBar:false,   // 是否隐藏tabBar
+            cnbadgeText:'',         // 首页Item角标文本
+            usbadgeText:''          // 海淘Item角标文本
         };
       }
 
-    // 设置Navigator跳转动画
+    // 设置 Navigator 转场动画
     setNavAnimationType(route) {
-        if (route.animationType) {  // 有值
+        if (route.animationType) {      // 有值
             let conf = route.animationType;
-            conf.gestures = null;   // 关闭返回手势
+            conf.gestures = null;           // 关闭返回手势
             return conf;
         }else {
-            return Navigator.SceneConfigs.PushFromRight;
+            return Navigator.SceneConfigs.PushFromRight;    // 默认转场动画
         }
     }
 
-    // 返回TabBar的Item
+    // 隐藏 TabBar
+    tongZhi(data) {
+        this.setState({
+            isHiddenTabBar:data,
+        })
+    }
+
+    // 返回 TabBar 的 Item
     renderTabBarItem(title, selectedTab, image, selectedImage, component, badgeText) {
         return(
             <TabNavigator.Item
@@ -79,12 +86,7 @@ export default class GD extends Component {
         );
     }
 
-    tongZhi(data) {
-        this.setState({
-            isHiddenTabBar:data,
-        })
-    }
-
+    // 组件加载完成
     componentDidMount() {
         // 注册通知
         this.subscription = DeviceEventEmitter.addListener('isHiddenTabBar', (data)=>{this.tongZhi(data)});

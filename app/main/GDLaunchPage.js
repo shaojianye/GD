@@ -16,6 +16,7 @@ import Main from './GDMain';
 
 export default class GDLaunchPage extends Component {
 
+    // 组件加载完成
     componentDidMount() {
         setTimeout(() => {
             this.props.navigator.replace({
@@ -26,6 +27,7 @@ export default class GDLaunchPage extends Component {
 
     render() {
         return(
+            // 启动页
             <Image source={{uri:'launchimage'}} style={styles.imageStyle} />
         );
     }

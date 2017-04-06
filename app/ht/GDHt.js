@@ -17,10 +17,15 @@ import {
     AsyncStorage,
 } from 'react-native';
 
+
+// 获取屏幕尺寸
+const {width, height} = Dimensions.get('window');
+
+// 数据
+import HTSiftData from '../data/HTSiftData.json';
+
 // 第三方
 import {PullList} from 'react-native-pull';
-
-const {width, height} = Dimensions.get('window');
 
 // 引用外部文件
 import CommunalNavBar from '../main/GDCommunalNavBar';
@@ -31,8 +36,6 @@ import USHalfHourHot from './GDUSHalfHourHot';
 import Search from '../main/GDSearch';
 import NoDataView from '../main/GDNoDataView';
 
-// 数据
-import HTSiftData from '../data/HTSiftData.json';
 
 export default class GDHome extends Component {
 
@@ -42,12 +45,14 @@ export default class GDHome extends Component {
         // 初始状态
         this.state = {
             dataSource: new ListView.DataSource({rowHasChanged:(r1, r2) => r1 !== r2}),
-            loaded:false,
-            isUSHalfHourHotModal:false,
-            isSiftModal:false,
+            loaded:false,                   // 是否显示 ListView
+            isUSHalfHourHotModal:false,     // 半小时热门状态
+            isSiftModal:false,              // 筛选菜单状态
         };
 
         this.data = [];
+
+        // 绑定操作
         this.loadData = this.loadData.bind(this);
         this.loadMore = this.loadMore.bind(this);
     }
@@ -108,7 +113,37 @@ export default class GDHome extends Component {
             })
     }
 
-    // 加载最新数据网络请求
+    // 加载更多数据的网络请求
+    loadMoreData(value) {
+
+        let params = {
+            "count" : 10,
+            "sinceid" : value,
+            "country" : "us"
+        };
+
+        HTTPBase.get('https://guangdiu.com/api/getlist.php', params)
+            .then((responseData) => {
+
+                // 拼接数据
+                this.data = this.data.concat(responseData.data);
+
+                this.setState({
+                    dataSource: this.state.dataSource.cloneWithRows(this.data),
+                    loaded:true,
+                });
+
+                // 存储数组中最后一个元素的id
+                let uslastID = responseData.data[responseData.data.length - 1].id;
+                AsyncStorage.setItem('uslastID', uslastID.toString());
+
+            })
+            .catch((error) => {
+
+            })
+    }
+
+    // 筛选数据网络请求
     loadSiftData(mall, cate) {
 
         let params = {};
@@ -154,36 +189,6 @@ export default class GDHome extends Component {
             })
     }
 
-    // 加载更多数据的网络请求
-    loadMoreData(value) {
-
-        let params = {
-            "count" : 10,
-            "sinceid" : value,
-            "country" : "us"
-        };
-
-        HTTPBase.get('https://guangdiu.com/api/getlist.php', params)
-            .then((responseData) => {
-
-                // 拼接数据
-                this.data = this.data.concat(responseData.data);
-
-                this.setState({
-                    dataSource: this.state.dataSource.cloneWithRows(this.data),
-                    loaded:true,
-                });
-
-                // 存储数组中最后一个元素的id
-                let uslastID = responseData.data[responseData.data.length - 1].id;
-                AsyncStorage.setItem('uslastID', uslastID.toString());
-
-            })
-            .catch((error) => {
-
-            })
-    }
-
     // 加载更多数据操作
     loadMore() {
         // 读取id
@@ -191,28 +196,38 @@ export default class GDHome extends Component {
             .then((value) => {
                 // 数据加载操作
                 this.loadMoreData(value);
-            })
-
+            });
     }
 
     // 模态到近半小时热门
     pushToHalfHourHot() {
         this.setState({
             isUSHalfHourHotModal:true
-        })
+        });
     }
 
     // 显示筛选菜单
     showSiftMenu() {
         this.setState({
             isSiftModal:true,
-        })
+        });
     }
 
     // 跳转到搜索
     pushToSearch() {
         this.props.navigator.push({
             component:Search,
+        });
+    }
+
+    // 跳转到详情页
+    pushToDetail(value) {
+        this.props.navigator.push({
+            component:CommunalDetail,
+            // 根据url进行跳转
+            params: {
+                url: 'https://guangdiu.com/api/showdetail.php' + '?' + 'id=' + value
+            }
         })
     }
 
@@ -221,7 +236,7 @@ export default class GDHome extends Component {
         this.setState({
             isUSHalfHourHotModal:false,
             isSiftModal:false,
-        })
+        });
     }
 
     // 关闭模态
@@ -229,15 +244,14 @@ export default class GDHome extends Component {
         this.setState({
             isUSHalfHourHotModal:data,
             isSiftModal:data
-        })
+        });
     }
 
     // 返回左边按钮
     renderLeftItem() {
         return(
             <TouchableOpacity
-                onPress={() => {this.pushToHalfHourHot()}}
-            >
+                onPress={() => {this.pushToHalfHourHot()}} >
                 <Image source={{uri:'hot_icon_20x20'}} style={styles.navbarLeftItemStyle} />
             </TouchableOpacity>
         );
@@ -247,8 +261,7 @@ export default class GDHome extends Component {
     renderTitleItem() {
         return(
             <TouchableOpacity
-                onPress={() => this.showSiftMenu()}
-            >
+                onPress={() => this.showSiftMenu()} >
                 <Image source={{uri:'navtitle_home_down_66x20'}} style={styles.navbarTitleItemStyle} />
             </TouchableOpacity>
         );
@@ -258,8 +271,7 @@ export default class GDHome extends Component {
     renderRightItem() {
         return(
             <TouchableOpacity
-                onPress={()=>{this.pushToSearch()}}
-            >
+                onPress={()=>{this.pushToSearch()}} >
                 <Image source={{uri:'search_icon_20x20'}} style={styles.navbarRightItemStyle} />
             </TouchableOpacity>
         );
@@ -269,43 +281,10 @@ export default class GDHome extends Component {
     renderFooter() {
         return (
             <View style={{height: 100}}>
+                {/* 旋转的小菊花 */}
                 <ActivityIndicator />
             </View>
         );
-    }
-
-    // 根据网络状态决定是否渲染 listview
-    renderListView() {
-        if (this.state.loaded === false) {
-            return(
-                <NoDataView />
-            );
-        }else {
-            return(
-                <PullList
-                    onPullRelease={(resolve) => this.loadData(resolve)}
-                    dataSource={this.state.dataSource}
-                    renderRow={this.renderRow.bind(this)}
-                    showsHorizontalScrollIndicator={false}
-                    style={styles.listViewStyle}
-                    initialListSize={5}
-                    renderHeader={this.renderHeader}
-                    onEndReached={this.loadMore}
-                    onEndReachedThreshold={60}
-                    renderFooter={this.renderFooter}
-                />
-            );
-        }
-    }
-
-    // 跳转到详情页
-    pushToDetail(value) {
-        this.props.navigator.push({
-            component:CommunalDetail,
-            params: {
-                url: 'https://guangdiu.com/api/showdetail.php' + '?' + 'id=' + value
-            }
-        })
     }
 
     // 返回每一行cell的样式
@@ -325,6 +304,31 @@ export default class GDHome extends Component {
         );
     }
 
+    // 根据网络状态决定是否渲染 ListView
+    renderListView() {
+        if (this.state.loaded === false) {  // 无数据
+            return(
+                <NoDataView />
+            );
+        }else {     // 有数据
+            return(
+                <PullList
+                    onPullRelease={(resolve) => this.loadData(resolve)}     // 下拉刷新操作
+                    dataSource={this.state.dataSource}          // 设置数据源
+                    renderRow={this.renderRow.bind(this)}       // 根据数据创建相应 cell
+                    showsHorizontalScrollIndicator={false}      // 隐藏水平指示器
+                    style={styles.listViewStyle}                // 样式
+                    initialListSize={7}                         // 优化:一次渲染几条数据
+                    renderHeader={this.renderHeader}            // 设置头部视图
+                    onEndReached={this.loadMore}                // 当接近底部特定距离时调用
+                    onEndReachedThreshold={60}                  // 当接近底部60时调用
+                    renderFooter={this.renderFooter}            // 设置尾部视图
+                />
+            );
+        }
+    }
+
+    // 组件加载完成
     componentDidMount() {
         this.loadData();
     }
