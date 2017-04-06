@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
         alignItems:'center',
         justifyContent:'space-between',
         backgroundColor:'white',
-        height:100,
+        height:120,
         width:width,
         borderBottomWidth:0.5,
         borderBottomColor:'gray',
@@ -52,11 +52,11 @@ const styles = StyleSheet.create({
     },
 
     imageStyle: {
-        width:70,
-        height:70,
+        width:90,
+        height:90,
     },
     titleStyle: {
-        width:width * 0.65,
+        width:width * 0.60,
     },
     arrowStyle: {
         width:10,

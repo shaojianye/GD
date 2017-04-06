@@ -28,7 +28,7 @@ export default class GD extends Component {
 
     // ES6
     // 构造
-      constructor(props) {
+    constructor(props) {
         super(props);
         // 初始状态
         this.state = {
@@ -37,7 +37,7 @@ export default class GD extends Component {
             cnbadgeText:'',         // 首页Item角标文本
             usbadgeText:''          // 海淘Item角标文本
         };
-      }
+    }
 
     // 设置 Navigator 转场动画
     setNavAnimationType(route) {
@@ -51,7 +51,7 @@ export default class GD extends Component {
     }
 
     // 隐藏 TabBar
-    tongZhi(data) {
+    hiddenTabBar(data) {
         this.setState({
             isHiddenTabBar:data,
         })
@@ -89,7 +89,7 @@ export default class GD extends Component {
     // 组件加载完成
     componentDidMount() {
         // 注册通知
-        this.subscription = DeviceEventEmitter.addListener('isHiddenTabBar', (data)=>{this.tongZhi(data)});
+        this.subscription = DeviceEventEmitter.addListener('isHiddenTabBar', (data)=>{this.hiddenTabBar(data)});
 
         let cnfirstID = 0;
         let usfirstID = 0;
