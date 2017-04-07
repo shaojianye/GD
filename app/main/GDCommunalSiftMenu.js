@@ -74,7 +74,7 @@ export default class GDCommunalSiftMenu extends Component {
                 >
                     <View style={styles.itemViewStyle}>
                         <Image source={{uri:rowData.image}} style={styles.itemImageStyle} />
-                        <Text>{rowData.title}</Text>
+                        <Text style={{fontSize:13, marginTop:5}}>{rowData.title}</Text>
                     </View>
                 </TouchableOpacity>
             </View>

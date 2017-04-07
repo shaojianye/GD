@@ -15,6 +15,7 @@ import {
     ActivityIndicator,
     Modal,
     AsyncStorage,
+    DeviceEventEmitter,
 } from 'react-native';
 
 
@@ -38,6 +39,10 @@ import NoDataView from '../main/GDNoDataView';
 
 
 export default class GDHome extends Component {
+
+    static defaultProps = {
+        loadDataNumber:{}   // 回调
+    };
 
     // 构造
     constructor(props) {
@@ -86,6 +91,9 @@ export default class GDHome extends Component {
                         resolve();
                     }, 1000);
                 }
+
+                // 获取最新数据个数
+                this.loadDataNumber();
 
                 // 存储数组中最后一个元素的id
                 let uslastID = responseData.data[responseData.data.length - 1].id;
@@ -189,6 +197,11 @@ export default class GDHome extends Component {
             })
     }
 
+    // 获取最新数据个数
+    loadDataNumber() {
+        this.props.loadDataNumber();
+    }
+
     // 加载更多数据操作
     loadMore() {
         // 读取id
@@ -229,6 +242,12 @@ export default class GDHome extends Component {
                 url: 'https://guangdiu.com/api/showdetail.php' + '?' + 'id=' + value
             }
         })
+    }
+
+    // 点击了Item
+    clickTabBarItem() {
+        // 一键置顶
+        this.refs.pullList.scrollTo({y:0});
     }
 
     // 安卓模态销毁处理
@@ -330,7 +349,11 @@ export default class GDHome extends Component {
 
     // 组件加载完成
     componentDidMount() {
+        // 加载最新数据
         this.loadData();
+
+        // 注册通知
+        this.subscription = DeviceEventEmitter.addListener('clickHTItem', () => this.clickTabBarItem());
     }
 
     render() {

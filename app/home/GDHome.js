@@ -2,7 +2,7 @@
  * Created by yeshaojian on 17/3/14.
  */
 
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import {
     StyleSheet,
     Text,
@@ -15,6 +15,7 @@ import {
     ActivityIndicator,
     Modal,
     AsyncStorage,
+    DeviceEventEmitter,
 } from 'react-native';
 
 
@@ -37,6 +38,10 @@ import NoDataView from '../main/GDNoDataView';
 
 
 export default class GDHome extends Component {
+
+    static defaultProps = {
+        loadDataNumber:{},   // 回调
+    };
 
     // 构造
     constructor(props) {
@@ -82,6 +87,9 @@ export default class GDHome extends Component {
                         resolve();
                     }, 1000);
                 }
+
+                // 获取最新数据个数
+                this.loadDataNumber();
 
                 // 存储数组中最后一个元素的id
                 let cnlastID = responseData.data[responseData.data.length - 1].id;
@@ -186,6 +194,11 @@ export default class GDHome extends Component {
             })
     }
 
+    // 获取最新数据个数
+    loadDataNumber() {
+        this.props.loadDataNumber();
+    }
+
     // 加载更多数据操作
     loadMore() {
         // 读取id
@@ -242,6 +255,12 @@ export default class GDHome extends Component {
                 url: 'https://guangdiu.com/api/showdetail.php' + '?' + 'id=' + value
             }
         })
+    }
+
+    // 点击了Item
+    clickTabBarItem() {
+        // 一键置顶
+        this.refs.pullList.scrollTo({y:0});
     }
 
     // 返回左边按钮
@@ -303,15 +322,15 @@ export default class GDHome extends Component {
         );
     }
 
-    // 根据网络状态决定是否渲染 listview
+    // 根据网络状态决定是否渲染 ListView
     renderListView() {
-        if (this.state.loaded === false) {
+        if (this.state.loaded === false) {      // 无数据
             return(
                 <NoDataView />
             );
-        }else {
+        }else {         // 有数据
             return(
-                <PullList
+                <PullList ref="pullList"
                     onPullRelease={(resolve) => this.loadData(resolve)}     // 下拉刷新操作
                     dataSource={this.state.dataSource}          // 设置数据源
                     renderRow={this.renderRow.bind(this)}       // 根据数据创建相应 cell
@@ -331,6 +350,9 @@ export default class GDHome extends Component {
     componentDidMount() {
         // 刷新数据
         this.loadData();
+
+        // 注册通知
+        this.subscription = DeviceEventEmitter.addListener('clickHomeItem', () => this.clickTabBarItem());
     }
 
     render() {
