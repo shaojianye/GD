@@ -268,8 +268,25 @@ export default class GDHome extends Component {
 
     // 点击了Item
     clickTabBarItem() {
-        // 一键置顶
-        this.refs.pullList.scrollTo({y:0});
+
+        let PullList = this.refs.pullList;
+
+        if (PullList.scroll.scrollProperties.offset > 0) {      // 不在顶部
+            // 一键置顶
+            PullList.scrollTo({y:0});
+        }else {     // 在顶部
+
+            // 执行下拉刷新动画
+            PullList.state.pullPan = new Animated.ValueXY({x: 0, y: this.topIndicatorHeight * -1});
+
+            // 加载最新数据
+            this.loadData();
+
+            // 关闭动画
+            setTimeout(() => {
+                PullList.resetDefaultXYHandler();
+            },1000);
+        }
     }
 
     // 返回左边按钮
