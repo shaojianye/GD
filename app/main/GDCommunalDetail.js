@@ -9,6 +9,7 @@ import {
     Text,
     TouchableOpacity,
     DeviceEventEmitter,
+    Image,
 } from 'react-native';
 
 
@@ -33,7 +34,10 @@ export default class GDCommunalDetail extends Component {
             <TouchableOpacity
                 onPress={() => {this.pop()}}
             >
-                <Text>返回</Text>
+                <View style={{flexDirection:'row', alignItems:'center'}}>
+                    <Image source={{uri:'back'}} style={styles.navBarLeftItemStyle} />
+                    <Text>返回</Text>
+                </View>
             </TouchableOpacity>
         );
     }
@@ -78,5 +82,11 @@ const styles = StyleSheet.create({
 
     webViewStyle: {
         flex:1
-    }
+    },
+
+    navBarLeftItemStyle: {
+        width:20,
+        height:20,
+        marginLeft:15,
+    },
 });
