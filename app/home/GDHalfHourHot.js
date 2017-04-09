@@ -12,6 +12,7 @@ import {
     ListView,
     Dimensions,
     DeviceEventEmitter,
+    InteractionManager,
 } from 'react-native';
 
 
@@ -72,12 +73,14 @@ export default class GDHalfHourHot extends Component {
 
     // 跳转到详情页
     pushToDetail(value) {
-        this.props.navigator.push({
-            component:CommunalDetail,
-            params: {
-                url: 'https://guangdiu.com/api/showdetail.php' + '?' + 'id=' + value
-            }
-        })
+        InteractionManager.runAfterInteractions(() => {
+            this.props.navigator.push({
+                component: CommunalDetail,
+                params: {
+                    url: 'https://guangdiu.com/api/showdetail.php' + '?' + 'id=' + value
+                }
+            });
+        });
     }
 
     // 返回中间按钮

@@ -16,6 +16,7 @@ import {
     Modal,
     AsyncStorage,
     DeviceEventEmitter,
+    InteractionManager,
 } from 'react-native';
 
 
@@ -163,11 +164,13 @@ export default class GDHome extends Component {
 
         if (mall === "") {  // cate 有值
             params = {
-                "cate" : cate
+                "cate" : cate,
+                "country" : "us"
             };
         }else {
             params = {
-                "mall" : mall
+                "mall" : mall,
+                "country" : "us"
             };
         }
 
@@ -235,13 +238,15 @@ export default class GDHome extends Component {
 
     // 跳转到详情页
     pushToDetail(value) {
-        this.props.navigator.push({
-            component:CommunalDetail,
-            // 根据url进行跳转
-            params: {
-                url: 'https://guangdiu.com/api/showdetail.php' + '?' + 'id=' + value
-            }
-        })
+        InteractionManager.runAfterInteractions(() => {
+            this.props.navigator.push({
+                component: CommunalDetail,
+                // 根据url进行跳转
+                params: {
+                    url: 'https://guangdiu.com/api/showdetail.php' + '?' + 'id=' + value
+                }
+            });
+        });
     }
 
     // 点击了Item
@@ -331,7 +336,7 @@ export default class GDHome extends Component {
             );
         }else {     // 有数据
             return(
-                <PullList
+                <PullList ref="pullList"
                     onPullRelease={(resolve) => this.loadData(resolve)}     // 下拉刷新操作
                     dataSource={this.state.dataSource}          // 设置数据源
                     renderRow={this.renderRow.bind(this)}       // 根据数据创建相应 cell

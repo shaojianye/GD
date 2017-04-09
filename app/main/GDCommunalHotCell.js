@@ -48,7 +48,6 @@ const styles = StyleSheet.create({
         borderBottomWidth:0.5,
         borderBottomColor:'gray',
         marginLeft:15
-
     },
 
     imageStyle: {

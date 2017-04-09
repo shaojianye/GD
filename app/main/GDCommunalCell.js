@@ -46,7 +46,7 @@ export default class GDCommunalCell extends Component {
         let monthC = diffValue/month;   // 相差了几个月
         let weekC = diffValue/week;     // 相差几周
         let dayC = diffValue/day;       // 相差几天
-        let hourC = diffValue/hour      // 相差几小时
+        let hourC = diffValue/hour;     // 相差几小时
         let minuteC = diffValue/minute; // 相差几分钟
 
         let result;
@@ -108,7 +108,6 @@ const styles = StyleSheet.create({
         borderBottomWidth:0.5,
         borderBottomColor:'gray',
         marginLeft:15
-
     },
 
     imageStyle: {

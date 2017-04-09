@@ -15,6 +15,7 @@ import {
     ActivityIndicator,
     Modal,
     AsyncStorage,
+    InteractionManager,
 } from 'react-native';
 
 
@@ -104,19 +105,23 @@ export default class GDHourList extends Component {
 
     // 跳转到设置
     pushToSettings() {
-        this.props.navigator.push({
-            component:Settings,
-        })
+        InteractionManager.runAfterInteractions(() => {
+            this.props.navigator.push({
+                component: Settings,
+            });
+        });
     }
 
     // 跳转到详情页
     pushToDetail(value) {
-        this.props.navigator.push({
-            component:CommunalDetail,
-            params: {
-                url: 'https://guangdiu.com/api/showdetail.php' + '?' + 'id=' + value
-            }
-        })
+        InteractionManager.runAfterInteractions(() => {
+            this.props.navigator.push({
+                component: CommunalDetail,
+                params: {
+                    url: 'https://guangdiu.com/api/showdetail.php' + '?' + 'id=' + value
+                }
+            });
+        });
     }
 
     // 上一小时点击事件

@@ -11,6 +11,7 @@ import {
     TouchableOpacity,
     Dimensions,
     Platform,
+    Animated,
 } from 'react-native';
 
 
@@ -22,7 +23,7 @@ export default class GDCommunalSiftMenu extends Component {
 
     static defaultProps = {
         removeModal:{},     // 销毁模态回调
-        loadSiftData:{}     // 筛选菜单回调
+        loadSiftData:{},     // 筛选菜单回调
     };
 
     static propTypes = {
@@ -62,7 +63,7 @@ export default class GDCommunalSiftMenu extends Component {
         // 重新渲染
         this.setState({
             dataSource: this.state.dataSource.cloneWithRows(data),
-        })
+        });
     }
 
     // 返回一行 Cell
@@ -96,6 +97,7 @@ export default class GDCommunalSiftMenu extends Component {
                 <View style={styles.container}>
                     {/* 菜单内容 */}
                     <ListView
+
                         scrollEnabled={false}
                         dataSource={this.state.dataSource}                  // 设置数据源
                         renderRow={this.renderRow.bind(this)}               // 根据数据初始化 Cell

@@ -16,6 +16,8 @@ import {
     Modal,
     AsyncStorage,
     DeviceEventEmitter,
+    InteractionManager,
+    Animated,
 } from 'react-native';
 
 
@@ -106,6 +108,7 @@ export default class GDHome extends Component {
                 RealmBase.create('HomeData', responseData.data);
             })
             .catch((error) => {
+
                 // 拿到本地存储的数据,展示出来,如果没有存储,那就显示无数据页面
                 this.data = RealmBase.loadAll('HomeData');
 
@@ -196,6 +199,7 @@ export default class GDHome extends Component {
 
     // 获取最新数据个数
     loadDataNumber() {
+
         this.props.loadDataNumber();
     }
 
@@ -219,9 +223,11 @@ export default class GDHome extends Component {
 
     // 跳转到搜索
     pushToSearch() {
-        this.props.navigator.push({
-            component:Search,
-        })
+        InteractionManager.runAfterInteractions(() => {
+            this.props.navigator.push({
+                component: Search,
+            });
+        });
     }
 
     // 安卓模态销毁处理
@@ -249,12 +255,15 @@ export default class GDHome extends Component {
 
     // 跳转到详情页
     pushToDetail(value) {
-        this.props.navigator.push({
-            component:CommunalDetail,
-            params: {
-                url: 'https://guangdiu.com/api/showdetail.php' + '?' + 'id=' + value
-            }
-        })
+        InteractionManager.runAfterInteractions(() => {
+            this.props.navigator.push({
+                component:CommunalDetail,
+                params: {
+                    url: 'https://guangdiu.com/api/showdetail.php' + '?' + 'id=' + value
+                }
+            });
+        });
+
     }
 
     // 点击了Item
@@ -359,11 +368,11 @@ export default class GDHome extends Component {
         return (
             <View style={styles.container}>
                 {/* 初始化近半小时热门 */}
-                <Modal
-                    animationType='slide'
-                    transparent={false}
-                    visible={this.state.isHalfHourHotModal}
-                    onRequestClose={() => this.onRequestClose()} >
+                <Modal pointerEvents={'box-none'}
+                       animationType='slide'
+                       transparent={false}
+                       visible={this.state.isHalfHourHotModal}
+                       onRequestClose={() => this.onRequestClose()} >
 
                     {/* 包装导航功能 */}
                     <Navigator
@@ -382,11 +391,11 @@ export default class GDHome extends Component {
                 </Modal>
 
                 {/* 初始化筛选菜单 */}
-                <Modal
-                    animationType='none'
-                    transparent={true}
-                    visible={this.state.isSiftModal}
-                    onRequestClose={() => this.onRequestClose()}
+                <Modal pointerEvents={'box-none'}
+                       animationType='none'
+                       transparent={true}
+                       visible={this.state.isSiftModal}
+                       onRequestClose={() => this.onRequestClose()}
                 >
                     <CommunalSiftMenu
                         removeModal={(data) => this.closeModal(data)}
@@ -410,7 +419,7 @@ export default class GDHome extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        flex:1,
         alignItems: 'center',
         backgroundColor: 'white',
     },
