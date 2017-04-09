@@ -382,6 +382,16 @@ export default class GDHome extends Component {
     render() {
         return (
             <View style={styles.container}>
+                {/* 导航栏样式 */}
+                <CommunalNavBar
+                    leftItem = {() => this.renderLeftItem()}
+                    titleItem = {() => this.renderTitleItem()}
+                    rightItem = {() => this.renderRightItem()}
+                />
+
+                {/* 根据网络状态决定是否渲染 listview */}
+                {this.renderListView()}
+
                 {/* 初始化近半小时热门 */}
                 <Modal
                     animationType='slide'
@@ -416,16 +426,6 @@ export default class GDHome extends Component {
                         data={HTSiftData}
                         loadSiftData={(mall, cate) => this.loadSiftData(mall, cate)} />
                 </Modal>
-
-                {/* 导航栏样式 */}
-                <CommunalNavBar
-                    leftItem = {() => this.renderLeftItem()}
-                    titleItem = {() => this.renderTitleItem()}
-                    rightItem = {() => this.renderRightItem()}
-                />
-
-                {/* 根据网络状态决定是否渲染 listview */}
-                {this.renderListView()}
             </View>
         );
     }
