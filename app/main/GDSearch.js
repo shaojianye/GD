@@ -264,6 +264,7 @@ export default class GDHome extends Component {
                             clearButtonMode="while-editing"
                             onChangeText={(text) => {this.changeText = text}}
                             onEndEditing={() => this.loadData()}
+                            underlineColorAndroid={'transparent'}
                         />
                     </View>
 
