@@ -379,6 +379,11 @@ export default class GDHome extends Component {
         this.subscription = DeviceEventEmitter.addListener('clickHTItem', () => this.clickTabBarItem());
     }
 
+    componentWillUnmount() {
+        // 注销通知
+        this.subscription.remove();
+    }
+
     render() {
         return (
             <View style={styles.container}>

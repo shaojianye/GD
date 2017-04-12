@@ -27,7 +27,7 @@ const {width, height} = Dimensions.get('window');
 import HomeSiftData from '../data/HomeSiftData.json';
 
 // 第三方
-import {PullList} from 'react-native-pull';
+import { PullList } from 'react-native-pull';
 
 // 引用外部文件
 import CommunalNavBar from '../main/GDCommunalNavBar';
@@ -380,6 +380,11 @@ export default class GDHome extends Component {
 
         // 注册通知
         this.subscription = DeviceEventEmitter.addListener('clickHomeItem', () => this.clickTabBarItem());
+    }
+
+    componentWillUnmount() {
+        // 注销通知
+        this.subscription.remove();
     }
 
     render() {

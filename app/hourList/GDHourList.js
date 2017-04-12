@@ -82,7 +82,7 @@ export default class GDHourList extends Component {
                     dataSource: this.state.dataSource.cloneWithRows(responseData.data),
                     loaded:true,
                     prompt:responseData.displaydate + responseData.rankhour + '点档' + '(' + responseData.rankduring + ')',
-                    isNextTouch:isNextTouch,
+                    isNextTouch:isNextTouch,    // 更新按钮状态
                 });
 
                 // 关闭刷新动画
