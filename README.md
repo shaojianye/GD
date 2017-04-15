@@ -1,6 +1,6 @@
 [目前效果(如果图片不显示或者显示异常，可点击查看)](http://upload-images.jianshu.io/upload_images/1923109-0e1c1a6c9ee20ebf.gif?imageMogr2/auto-orient/strip)
 
-![效果图.gif](http://upload-images.jianshu.io/upload_images/1923109-b9188cd28494cdb7.gif?imageMogr2/auto-orient/strip)
+![效果演示.gif](http://upload-images.jianshu.io/upload_images/1923109-3230cb00e8cfdd15.gif?imageMogr2/auto-orient/strip)
 
 ## 前言
 
@@ -16,15 +16,13 @@
 
 ## 开发进度
 
-- 已完成所有大模块，接下来是细节的完善和优化这一部分。
+- 第一个学习版本已经差不多写完了，尽量将能想起来的常见细节完成了，剩下的就放到下一个版本吧！
 
 ## 教程完成进度
 
-- 已更新至[React-Native 之 项目实战(四)]()，感兴趣的朋友欢迎前往阅读。
+- 已更新至[React-Native 之 项目实战(五)](http://www.jianshu.com/p/21a4df0a9d11)，感兴趣的朋友欢迎前往阅读。
 
 ## 暂定未完成事项
-
-- 细节完善与优化。
 
 - **`redux`** 介绍。
 

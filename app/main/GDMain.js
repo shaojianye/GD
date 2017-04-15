@@ -121,7 +121,6 @@ export default class GD extends Component {
                                           loadDataNumber={() => this.loadDataNumber()} />
                     }}
 
-                    navigationBar={NavigationBar}
                 />
             </TabNavigator.Item>
         );
