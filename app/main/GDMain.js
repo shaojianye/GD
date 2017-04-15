@@ -23,6 +23,7 @@ import HT from '../ht/GDHt';
 import HourList from '../hourList/GDHourList';
 import HTTP from '../http/HTTPBase';
 import RealmStorage from '../storage/realmStorage';
+import NavigationBar from './GDNavigationBar';
 
 export default class GD extends Component {
 
@@ -119,6 +120,8 @@ export default class GD extends Component {
                                           navigator={navigator}
                                           loadDataNumber={() => this.loadDataNumber()} />
                     }}
+
+                    navigationBar={NavigationBar}
                 />
             </TabNavigator.Item>
         );
