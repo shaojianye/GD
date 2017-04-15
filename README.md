@@ -1,4 +1,4 @@
-[目前效果(如果图片不显示或者显示异常，可点击查看)](http://upload-images.jianshu.io/upload_images/1923109-0e1c1a6c9ee20ebf.gif?imageMogr2/auto-orient/strip)
+[目前效果(如果图片不显示或者显示异常，可点击查看)](http://upload-images.jianshu.io/upload_images/1923109-3230cb00e8cfdd15.gif?imageMogr2/auto-orient/strip)
 
 ![效果演示.gif](http://upload-images.jianshu.io/upload_images/1923109-3230cb00e8cfdd15.gif?imageMogr2/auto-orient/strip)
 
