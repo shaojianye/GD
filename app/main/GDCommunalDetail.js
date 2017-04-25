@@ -54,6 +54,10 @@ export default class GDCommunalDetail extends Component {
         DeviceEventEmitter.emit('isHiddenTabBar', false);
     }
 
+    consoleLog(){
+
+    }
+
     render() {
         return(
             <View style={styles.container}>
@@ -63,7 +67,7 @@ export default class GDCommunalDetail extends Component {
                 />
 
                 {/* 初始化WebView */}
-                <WebView
+                <WebView ref="webView"
                     style={styles.webViewStyle}                     // 样式
                     source={{uri:this.props.url, method: 'GET' }}   // 路径(uri:路径, method:请求方式)
                     javaScriptEnabled={true}                        // 安卓平台允许javaScript
